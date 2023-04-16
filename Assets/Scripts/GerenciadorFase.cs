@@ -12,14 +12,9 @@ public class GerenciadorFase : MonoBehaviour
     public GameObject PersonagemAtivo;
     int intPersonagemAtivo;
 
-    //public int faseAtual;
-
-    //PlayerPrefs.SetInt("FASE", faseAtual);
-    //int fSave = PlayerPrefs.GetInt("FASE");
-
     private void Start()
     {
-        if(PlayerPrefs.GetInt("PERSONAGEMATIVO") == 0)
+        if (PlayerPrefs.GetInt("PERSONAGEM_ATIVO") == 0)
         {
             ZedAtivo();
         }
@@ -31,7 +26,11 @@ public class GerenciadorFase : MonoBehaviour
 
     private void Update()
     {
+        // Controle personagem ativo
         ControlePersonagemAtivo();
+
+        // Controle UI
+        ControleAtaquesUI();
     }
 
     void ControlePersonagemAtivo()
@@ -67,11 +66,35 @@ public class GerenciadorFase : MonoBehaviour
         Amy.SetActive(true);
     }
 
-    
-    public void LoadFase(int faseParaIr)
+    void ControleAtaquesUI()
     {
-        PlayerPrefs.SetInt("PERSONAGEMATIVO", intPersonagemAtivo);
-        SceneManager.LoadScene(faseParaIr);
+        if(PlayerPrefs.GetInt("PERSONAGEM_ATIVO") == 0)
+        {
+            GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>().UIZed();
+            //***Ataques de acordo com níveis do Zed
+        }
+        else
+        {
+            GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>().UIAmy();
+            int nivel = PlayerPrefs.GetInt("AMY_NIVEL");
+            if (nivel > 1 && nivel < 4)
+            {
+                //***Ativar botão atk água
+            }
+            else if(nivel < 5)
+            {
+                //***Ativar botão magia escudo
+            }
+            else if (nivel == 5)
+            {
+                //***Ativar botão atk fogo
+            }
+        }
     }
 
+    public void LoadFase(int faseParaIr)
+    {
+        PlayerPrefs.SetInt("PERSONAGEM_ATIVO", intPersonagemAtivo);
+        SceneManager.LoadScene(faseParaIr);
+    }
 }

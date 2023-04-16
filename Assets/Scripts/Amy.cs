@@ -26,11 +26,18 @@ public class Amy : MonoBehaviour
     private Animator ControlAnim;
 
     // Ataques
-    public GameObject MeuAtaque;
+    //public GameObject MeuAtaque;
+    bool escudoMagiaAtivado = false;
+    float tempoEscudoMagia = 0.0f;
+    public GameObject DisparoAguaPrefab;
+    public GameObject PontoDeSaida;
 
 
     void Start()
     {
+        // Stats
+        loadStats();
+
         // Inicio Posição
         GerenciadorFase = GameObject.FindGameObjectWithTag("GameController").GetComponent<GerenciadorFase>();
         transform.position = GerenciadorFase.PosicaoInicial;
@@ -51,9 +58,17 @@ public class Amy : MonoBehaviour
         ControleAnimacaoMover();
 
         //// Ataques
-        //ControleAtaque();
+        // Controle de input e níveis permitidos para ataques
+        ControleAtaques();
+        // Controle do cooldown de escudo quando ativado
+        if (escudoMagiaAtivado)
+        {
+            CoolDownEscudoMagia();
+        }
 
         //// Controle Status
+        // Salvar stats constantemente
+        SalvarStats();
         // Exp
         ControleNivel();
     }
@@ -111,20 +126,90 @@ public class Amy : MonoBehaviour
         }
     }
 
-    /*
-    void ControleAtaque()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            ControlAnim.SetTrigger("Ataque");
-        }
 
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+    void ControleAtaques()
+    {
+        // Ativar escudo
+        if (Input.GetMouseButtonDown(1))
         {
-            ControlAnim.SetTrigger("Disparo");
+            ControlAnim.SetTrigger("Escudo");
+        }
+        // Se escudo não tiver ativado, outros ataques podem ser ativados
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                // Controle mana é um pois gasta 2 para a magia, e 3 é ganho. O resultado final assim é 1.
+                ControleMana(1);
+                ControleMana(3);
+                //ControleStaminaZed(3);
+                //ControleVidaZed(3);
+                Destino = transform.position;
+                ControlAnim.SetTrigger("Cura");
+            }
+
+            // A partir do nível 2
+            if (nivel > 1)
+            {
+                if (Input.GetKeyDown(KeyCode.Alpha2))
+                {
+                    if(mana >= 2)
+                    {
+                        Destino = transform.position;
+                        ControlAnim.SetTrigger("AtkAgua");
+                    }
+                }
+
+                // A partir do nível 4
+                if (nivel > 3)
+                {
+                    if (Input.GetKeyDown(KeyCode.Alpha3))
+                    {
+                        if (!escudoMagiaAtivado) 
+                        {
+                            Destino = transform.position;
+                            ControlAnim.SetTrigger("Escudo");
+                            escudoMagiaAtivado = true;
+                            // ***Ativar aqui o gameobject da magia do escudo
+                            
+                        }
+                    }
+
+                    // A partir do nível 5
+                    if (nivel > 4)
+                    {
+                        if (Input.GetKeyDown(KeyCode.Alpha4))
+                        {
+                            Destino = transform.position;
+                            ControlAnim.SetTrigger("AtkFogo");
+                        }
+                    }
+                }
+            }
         }
     }
-    */
+    
+    void ControleMana(float alteracaoMana)
+    {
+        mana += alteracaoMana;
+        //***Alterar barra de mana aqui
+    }
+    
+    void loadStats()
+    {
+        nivel = PlayerPrefs.GetInt("AMY_NIVEL");
+        exp = PlayerPrefs.GetFloat("AMY_EXP");
+        hp = PlayerPrefs.GetFloat("AMY_VIDA");
+        mana = PlayerPrefs.GetFloat("AMY_MANA");
+    }
+
+    public void SalvarStats()
+    {
+        PlayerPrefs.SetInt("AMY_NIVEL", nivel);
+        PlayerPrefs.SetFloat("AMY_EXP", exp);
+        PlayerPrefs.SetFloat("AMY_VIDA", hp);
+        PlayerPrefs.SetFloat("AMY_MANA", mana);
+    }
 
     /*
     public void AtivarAtk()
@@ -138,30 +223,34 @@ public class Amy : MonoBehaviour
     }
     */
 
-    
-    void AtkDistancia()
+    void CoolDownEscudoMagia()
     {
-        RaycastHit meuAtkD;
-        if (Physics.Raycast(MeuAtaque.transform.position, transform.forward, out meuAtkD, 10f))
+        tempoEscudoMagia += Time.deltaTime;
+        if(tempoEscudoMagia > 3)
         {
-
-            if (meuAtkD.collider.gameObject.tag == "Enemy")
-            {
-                //meuAtkD.collider.gameObject.GetComponent<Enemy>().TomeiDano();
-            }
-
+            // ***Desativar aqui o gameobject da magia do escudo
+            tempoEscudoMagia = 0f;
+            escudoMagiaAtivado = false;
         }
     }
+    public void AtkAgua()
+    {
+        ControleMana(-2);
+        GameObject DisparoAgua = Instantiate(DisparoAguaPrefab, PontoDeSaida.transform.position, Quaternion.identity);
+        DisparoAgua.GetComponent<Rigidbody>().AddForce(transform.forward * 100);
+        //***Som do disparo de água
+        //DisparoAguaAudio.Play(0);
+        Destroy(DisparoAgua, 1f);
+    }
     
-
-
     private void OnTriggerEnter(Collider colidiu)
     {
         if (colidiu.gameObject.tag == "EnemyAtk")
         {
             if (vivo == true)
             {
-                hp--;
+                float danoALevar = colidiu.gameObject.GetComponent<Ataque>().dano;
+                hp -= danoALevar;
                 ControlAnim.SetTrigger("Damage");
                 if (hp <= 0)
                 {

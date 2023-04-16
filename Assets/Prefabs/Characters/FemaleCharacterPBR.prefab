@@ -2159,9 +2159,11 @@ MonoBehaviour:
   hp: 50
   mana: 10
   exp: 0
+  expParaProxNivel: 10
   nivel: 1
   vivo: 1
-  MeuAtaque: {fileID: 0}
+  DisparoAguaPrefab: {fileID: 4558909152534749240, guid: 09dd71d513f6eeb46b44cf70b10ff016, type: 3}
+  PontoDeSaida: {fileID: 0}
 --- !u!195 &831222708406832260
 NavMeshAgent:
   m_ObjectHideFlags: 0

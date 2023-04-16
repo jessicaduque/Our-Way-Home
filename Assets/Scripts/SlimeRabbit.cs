@@ -9,6 +9,7 @@ public class SlimeRabbit : MonoBehaviour
 
     // Stats
     public int hp = 5;
+    float expDada = 4;
 
     private void Start()
     {
