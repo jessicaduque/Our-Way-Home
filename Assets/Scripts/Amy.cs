@@ -17,7 +17,9 @@ public class Amy : MonoBehaviour
     public float hp = 10;
     public float mana = 10;
     public float exp = 0;
+    public float expParaProxNivel = 10;
     public int nivel = 1;
+    int nivelMax = 5;
     public bool vivo = true;
 
     // Animador
@@ -39,16 +41,21 @@ public class Amy : MonoBehaviour
 
         // Animador
         ControlAnim = GetComponent<Animator>();
-}
+    }
 
-    
+
     void Update()
     {
-        // Mover
+        //// Mover
         NavMeshMover();
         ControleAnimacaoMover();
 
+        //// Ataques
         //ControleAtaque();
+
+        //// Controle Status
+        // Exp
+        ControleNivel();
     }
 
     void ControleAnimacaoMover()
@@ -76,7 +83,7 @@ public class Amy : MonoBehaviour
                     Agente.stoppingDistance = 0.5f;
                     Destino = localTocou.transform.position;
                 }
-                else if(localTocou.collider.gameObject.tag == "Obstacule")
+                else if (localTocou.collider.gameObject.tag == "Obstacule")
                 {
                     Agente.stoppingDistance = 0.35f;
                     Destino = localTocou.transform.position;
@@ -91,6 +98,17 @@ public class Amy : MonoBehaviour
         }
 
         Agente.SetDestination(Destino);
+    }
+
+    void ControleNivel()
+    {
+        // Enquanto o nível não for o nível máximo, o player aumenta de nível ao ter exp suficiente, e o exp necessária para o próximo nível também aumenta
+        if(exp >= expParaProxNivel && nivel != nivelMax)
+        {
+            nivel++;
+            nivelMax += 10;
+            exp = 0;
+        }
     }
 
     /*

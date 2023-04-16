@@ -5,10 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class GerenciadorFase : MonoBehaviour
 {
+    // Variáveis para início de fase
     public Vector3 PosicaoInicial;
     public GameObject Amy;
     public GameObject Zed;
     public GameObject PersonagemAtivo;
+    int intPersonagemAtivo;
 
     //public int faseAtual;
 
@@ -17,6 +19,14 @@ public class GerenciadorFase : MonoBehaviour
 
     private void Start()
     {
+        if(PlayerPrefs.GetInt("PERSONAGEMATIVO") == 0)
+        {
+            ZedAtivo();
+        }
+        else
+        {
+            AmyAtivo();
+        }
     }
 
     private void Update()
@@ -30,24 +40,37 @@ public class GerenciadorFase : MonoBehaviour
         {
             if (PersonagemAtivo == Amy)
             {
-                Zed.transform.position = Amy.transform.position;
-                PersonagemAtivo = Zed;
-                Zed.SetActive(true);
-                Amy.SetActive(false);
+                ZedAtivo();
             }
             else
             {
-                Amy.transform.position = Zed.transform.position;
-                PersonagemAtivo = Amy;
-                Zed.SetActive(false);
-                Amy.SetActive(true);
+                AmyAtivo();
             }
         }
-
     }
 
+    void ZedAtivo()
+    {
+        Zed.transform.position = Amy.transform.position;
+        PersonagemAtivo = Zed;
+        intPersonagemAtivo = 0;
+        Zed.SetActive(true);
+        Amy.SetActive(false);
+    }
+
+    void AmyAtivo()
+    {
+        Amy.transform.position = Zed.transform.position;
+        PersonagemAtivo = Amy;
+        intPersonagemAtivo = 1;
+        Zed.SetActive(false);
+        Amy.SetActive(true);
+    }
+
+    
     public void LoadFase(int faseParaIr)
     {
+        PlayerPrefs.SetInt("PERSONAGEMATIVO", intPersonagemAtivo);
         SceneManager.LoadScene(faseParaIr);
     }
 
