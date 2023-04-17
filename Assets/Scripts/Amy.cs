@@ -14,11 +14,11 @@ public class Amy : MonoBehaviour
     private NavMeshAgent Agente;
 
     // Stats 
-    public float hp = 10;
-    public float mana = 10;
-    public float exp = 0;
+    public float hp;
+    public float mana;
+    public float exp;
     public float expParaProxNivel = 10;
-    public int nivel = 1;
+    public int nivel;
     int nivelMax = 5;
     public bool vivo = true;
 
@@ -27,10 +27,12 @@ public class Amy : MonoBehaviour
 
     // Ataques
     //public GameObject MeuAtaque;
-    bool escudoMagiaAtivado = false;
+    bool estaAtacando = false;
+    //bool escudoMagiaAtivado = false;
     float tempoEscudoMagia = 0.0f;
     public GameObject DisparoAguaPrefab;
     public GameObject PontoDeSaida;
+    public GameObject EscudoMagia;
     bool metadeValorAtaque = false;
 
 
@@ -53,8 +55,6 @@ public class Amy : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(metadeValorAtaque);
-
         //// Mover
         NavMeshMover();
         ControleAnimacaoMover();
@@ -62,11 +62,6 @@ public class Amy : MonoBehaviour
         //// Ataques
         // Controle de input e níveis permitidos para ataques
         ControleAtaques();
-        // Controle do cooldown de escudo quando ativado
-        if (escudoMagiaAtivado)
-        {
-            CoolDownEscudoMagia();
-        }
 
         //// Controle Status
         // Salvar stats constantemente
@@ -144,28 +139,32 @@ public class Amy : MonoBehaviour
     void ControleAtaques()
     {
         // Ativar escudo
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButton(1))
         {
-            ControlAnim.SetTrigger("Escudo");
+            Destino = transform.position;
+            ControlAnim.SetBool("Escudo", true);
         }
         // Se escudo não tiver ativado, outros ataques podem ser ativados
         else
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            ControlAnim.SetBool("Escudo", false);
+
+            if (Input.GetKeyDown(KeyCode.Alpha1) && !estaAtacando)
             {
                 // Controle mana é um pois gasta 2 para a magia, e 3 é ganho. O resultado final assim é 1.
-                AlteracaoMana(1);
-                AlteracaoVida(3);
-                //ControleStaminaZed(3);
-                //ControleVidaZed(3);
-                Destino = transform.position;
-                ControlAnim.SetTrigger("Cura");
+                if(mana >= 2 && (hp < 10 || mana < 10))
+                {
+                    //ControleStaminaZed(3);
+                    //ControleVidaZed(3);
+                    Destino = transform.position;
+                    ControlAnim.SetTrigger("Cura");
+                }
             }
 
             // A partir do nível 2
             if (nivel > 1)
             {
-                if (Input.GetKeyDown(KeyCode.Alpha2))
+                if (Input.GetKeyDown(KeyCode.Alpha2) && !estaAtacando)
                 {
                     if(mana >= 2)
                     {
@@ -177,25 +176,31 @@ public class Amy : MonoBehaviour
                 // A partir do nível 4
                 if (nivel > 3)
                 {
-                    if (Input.GetKeyDown(KeyCode.Alpha3))
+                    if (Input.GetKeyDown(KeyCode.Alpha3) && !estaAtacando)
                     {
-                        if (!escudoMagiaAtivado) 
+                        // Checa se escudo já está ativado
+                        if (!metadeValorAtaque) 
                         {
-                            Destino = transform.position;
-                            ControlAnim.SetTrigger("Escudo");
-                            escudoMagiaAtivado = true;
-                            // ***Ativar aqui o gameobject da magia do escudo
-                            
+                            if (mana >= 3)
+                            {
+                                Destino = transform.position;
+                                ControlAnim.SetTrigger("EscudoMagia");
+                                metadeValorAtaque = true;
+                                // ***Ativar aqui o gameobject da magia do escudo
+                            }
                         }
                     }
 
                     // A partir do nível 5
                     if (nivel > 4)
                     {
-                        if (Input.GetKeyDown(KeyCode.Alpha4))
+                        if (Input.GetKeyDown(KeyCode.Alpha4) && !estaAtacando)
                         {
-                            Destino = transform.position;
-                            ControlAnim.SetTrigger("AtkFogo");
+                            if(mana >= 4)
+                            {
+                                Destino = transform.position;
+                                ControlAnim.SetTrigger("AtkFogo");
+                            }
                         }
                     }
                 }
@@ -206,19 +211,50 @@ public class Amy : MonoBehaviour
     void AlteracaoMana(float alteracaoMana)
     {
         mana += alteracaoMana;
+
+        if(mana > 10)
+        {
+            mana = 10;
+        }
         //***Alterar barra de mana aqui
     }
 
     void AlteracaoVida(float alteracaoHP)
     {
-        hp += alteracaoHP;
+        // Se a alteração de hp for negativo (significando que o player levou o ataque, e não uma cura), verifica se o ataque deve ser ou não diminuído pela metade
+        if (metadeValorAtaque && alteracaoHP < 0)
+        {
+            hp += (alteracaoHP / 2f);
+        }
+        else
+        {
+            hp += alteracaoHP;
+
+        }
+
+        if(hp > 10)
+        {
+            hp = 10;
+        }
+
+        if(hp <= 0)
+        {
+            Morrer();
+        }
+
         //***Alterar barra de vida aqui
+
     }
 
     public void AlteracaoEXP(float alteracaoEXP)
     {
         exp += alteracaoEXP;
         //***Alterar barra de exp aqui
+    }
+
+    public void AtivarEscudoMagia()
+    {
+        EscudoMagia.gameObject.SetActive(true);
     }
 
     void loadStats()
@@ -237,6 +273,18 @@ public class Amy : MonoBehaviour
         PlayerPrefs.SetFloat("AMY_MANA", mana);
     }
 
+    public void EstaAtacando(int atacando)
+    {
+        if(atacando == 0)
+        {
+            estaAtacando = true;
+        }
+        else
+        {
+            estaAtacando = false;
+        }
+    }
+
     /*
     public void AtivarAtk()
     {
@@ -248,17 +296,6 @@ public class Amy : MonoBehaviour
         MeuAtaque.SetActive(false);
     }
     */
-
-    void CoolDownEscudoMagia()
-    {
-        tempoEscudoMagia += Time.deltaTime;
-        if(tempoEscudoMagia > 3)
-        {
-            // ***Desativar aqui o gameobject da magia do escudo
-            tempoEscudoMagia = 0f;
-            escudoMagiaAtivado = false;
-        }
-    }
     public void AtkAgua()
     {
         AlteracaoMana(-2);
