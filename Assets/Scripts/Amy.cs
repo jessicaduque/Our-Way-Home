@@ -28,10 +28,11 @@ public class Amy : MonoBehaviour
     // Ataques
     //public GameObject MeuAtaque;
     bool estaAtacando = false;
-    //bool escudoMagiaAtivado = false;
-    float tempoEscudoMagia = 0.0f;
+    bool levandoDano = false;
+    public GameObject FogoPrefab;
+    public GameObject PontoDeSaidaFogo;
     public GameObject DisparoAguaPrefab;
-    public GameObject PontoDeSaida;
+    public GameObject PontoDeSaidaAgua;
     public GameObject EscudoMagia;
     bool metadeValorAtaque = false;
 
@@ -80,32 +81,49 @@ public class Amy : MonoBehaviour
         {
             ControlAnim.SetBool("Move", false);
         }
+
+        
+        if (GameObject.FindGameObjectWithTag("Enemy")) 
+        {
+            GameObject Enemy = GameObject.FindGameObjectWithTag("Enemy");
+            if (Vector3.Distance(Enemy.transform.position, transform.position) < 1.3f)
+            {
+                transform.LookAt(Enemy.transform.position);
+            }
+            
+        } 
     }
     void NavMeshMover()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && vivo)
         {
-            Vector3 mousepoint = Input.mousePosition;
-            Ray pontodesaida = Camera.main.ScreenPointToRay(mousepoint);
-            RaycastHit localTocou;
-            if (Physics.Raycast(pontodesaida, out localTocou, Mathf.Infinity))
+            if(estaAtacando || levandoDano)
             {
-                if (localTocou.collider.gameObject.tag == "Enemy")
+                Destino = transform.position;
+            }
+            else
+            {
+                Vector3 mousepoint = Input.mousePosition;
+                Ray pontodesaida = Camera.main.ScreenPointToRay(mousepoint);
+                RaycastHit localTocou;
+                if (Physics.Raycast(pontodesaida, out localTocou, Mathf.Infinity))
                 {
-                    Agente.stoppingDistance = 0.5f;
-                    Destino = localTocou.transform.position;
+                    if (localTocou.collider.gameObject.tag == "Enemy")
+                    {
+                        Agente.stoppingDistance = 0.1f;
+                        Destino = localTocou.transform.position;
+                    }
+                    else if (localTocou.collider.gameObject.tag == "Obstacule")
+                    {
+                        Agente.stoppingDistance = 0.35f;
+                        Destino = localTocou.transform.position;
+                    }
+                    else
+                    {
+                        Agente.stoppingDistance = 0.1f;
+                        Destino = localTocou.point;
+                    }
                 }
-                else if (localTocou.collider.gameObject.tag == "Obstacule")
-                {
-                    Agente.stoppingDistance = 0.35f;
-                    Destino = localTocou.transform.position;
-                }
-                else
-                {
-                    Agente.stoppingDistance = 0.1f;
-                    Destino = localTocou.point;
-                }
-
             }
         }
 
@@ -198,7 +216,6 @@ public class Amy : MonoBehaviour
                         {
                             if(mana >= 4)
                             {
-                                Destino = transform.position;
                                 ControlAnim.SetTrigger("AtkFogo");
                             }
                         }
@@ -221,6 +238,8 @@ public class Amy : MonoBehaviour
 
     void AlteracaoVida(float alteracaoHP)
     {
+
+
         // Se a alteração de hp for negativo (significando que o player levou o ataque, e não uma cura), verifica se o ataque deve ser ou não diminuído pela metade
         if (metadeValorAtaque && alteracaoHP < 0)
         {
@@ -285,6 +304,18 @@ public class Amy : MonoBehaviour
         }
     }
 
+    public void LevandoDano(int dano)
+    {
+        if (dano == 0)
+        {
+            levandoDano = true;
+        }
+        else
+        {
+            levandoDano = false;
+        }
+    }
+
     /*
     public void AtivarAtk()
     {
@@ -299,27 +330,47 @@ public class Amy : MonoBehaviour
     public void AtkAgua()
     {
         AlteracaoMana(-2);
-        GameObject DisparoAgua = Instantiate(DisparoAguaPrefab, PontoDeSaida.transform.position, Quaternion.identity);
-        DisparoAgua.GetComponent<Rigidbody>().AddForce(transform.forward * 100);
+        GameObject DisparoAgua = Instantiate(DisparoAguaPrefab, PontoDeSaidaAgua.transform.position, Quaternion.identity);
+        DisparoAgua.GetComponent<Rigidbody>().AddForce(transform.forward * 90);
         //***Som do disparo de água
         //DisparoAguaAudio.Play(0);
         Destroy(DisparoAgua, 1f);
     }
-    
+
+    public void AtkFogo()
+    {
+        AlteracaoMana(-4);
+        GameObject Fogo;
+        if (GameObject.FindGameObjectWithTag("Enemy"))
+        {
+            GameObject Enemy = GameObject.FindGameObjectWithTag("Enemy");
+            Fogo = Instantiate(FogoPrefab, Enemy.transform.position, Quaternion.identity);
+        }
+        else
+        {
+            Fogo = Instantiate(FogoPrefab, PontoDeSaidaFogo.transform.position, Quaternion.identity);
+        }
+        
+        //***Som do fogo
+        //DisparoAguaAudio.Play(0);
+        Destroy(Fogo, 3f);
+    }
+
     private void OnTriggerEnter(Collider colidiu)
     {
-        if (colidiu.gameObject.tag == "EnemyAtk")
+        if (colidiu.gameObject.tag == "EnemyAttack")
         {
             if (vivo == true)
             {
                 float danoALevar = colidiu.gameObject.GetComponent<Ataque>().dano;
-                hp -= danoALevar;
+                AlteracaoVida(-danoALevar);
                 ControlAnim.SetTrigger("Damage");
                 if (hp <= 0)
                 {
                     Morrer();
                 }
             }
+            Destroy(colidiu.gameObject);
 
         }
     }

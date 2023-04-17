@@ -11,9 +11,13 @@ public class GerenciadorFase : MonoBehaviour
     public GameObject Zed;
     public GameObject PersonagemAtivo;
     int intPersonagemAtivo;
+    public int quantInimigosFase;
+    public bool faseCompleta = false;
 
     private void Start()
     {
+        quantInimigosFase = GameObject.FindGameObjectsWithTag("Enemy").Length;
+
         if (PlayerPrefs.GetInt("PERSONAGEM_ATIVO") == 0)
         {
             ZedAtivo();
@@ -31,6 +35,22 @@ public class GerenciadorFase : MonoBehaviour
 
         // Controle UI
         ControleAtaquesUI();
+
+        // InimigosVivos
+        ControleAvancarFase();
+    }
+
+    void ControleAvancarFase()
+    {
+        if(quantInimigosFase <= 0)
+        {
+            faseCompleta = true;
+        }
+    }
+
+    public void InimigoMorreu()
+    {
+        quantInimigosFase--;
     }
 
     void ControlePersonagemAtivo()
