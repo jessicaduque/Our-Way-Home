@@ -31,6 +31,7 @@ public class Amy : MonoBehaviour
     float tempoEscudoMagia = 0.0f;
     public GameObject DisparoAguaPrefab;
     public GameObject PontoDeSaida;
+    bool metadeValorAtaque = false;
 
 
     void Start()
@@ -50,9 +51,10 @@ public class Amy : MonoBehaviour
         ControlAnim = GetComponent<Animator>();
     }
 
-
     void Update()
     {
+        Debug.Log(metadeValorAtaque);
+
         //// Mover
         NavMeshMover();
         ControleAnimacaoMover();
@@ -117,15 +119,27 @@ public class Amy : MonoBehaviour
 
     void ControleNivel()
     {
+        //***Atualizar barra mana
+
         // Enquanto o nível não for o nível máximo, o player aumenta de nível ao ter exp suficiente, e o exp necessária para o próximo nível também aumenta
-        if(exp >= expParaProxNivel && nivel != nivelMax)
+        if (exp >= expParaProxNivel && nivel != nivelMax)
         {
+            if(exp > expParaProxNivel)
+            {
+                exp -= expParaProxNivel;
+            }
+            else
+            {
+                exp = 0;
+            }
             nivel++;
-            nivelMax += 10;
+            expParaProxNivel += 10;
+        }
+        else if(nivel == nivelMax)
+        {
             exp = 0;
         }
     }
-
 
     void ControleAtaques()
     {
@@ -140,8 +154,8 @@ public class Amy : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 // Controle mana é um pois gasta 2 para a magia, e 3 é ganho. O resultado final assim é 1.
-                ControleMana(1);
-                ControleMana(3);
+                AlteracaoMana(1);
+                AlteracaoVida(3);
                 //ControleStaminaZed(3);
                 //ControleVidaZed(3);
                 Destino = transform.position;
@@ -189,12 +203,24 @@ public class Amy : MonoBehaviour
         }
     }
     
-    void ControleMana(float alteracaoMana)
+    void AlteracaoMana(float alteracaoMana)
     {
         mana += alteracaoMana;
         //***Alterar barra de mana aqui
     }
-    
+
+    void AlteracaoVida(float alteracaoHP)
+    {
+        hp += alteracaoHP;
+        //***Alterar barra de vida aqui
+    }
+
+    public void AlteracaoEXP(float alteracaoEXP)
+    {
+        exp += alteracaoEXP;
+        //***Alterar barra de exp aqui
+    }
+
     void loadStats()
     {
         nivel = PlayerPrefs.GetInt("AMY_NIVEL");
@@ -235,7 +261,7 @@ public class Amy : MonoBehaviour
     }
     public void AtkAgua()
     {
-        ControleMana(-2);
+        AlteracaoMana(-2);
         GameObject DisparoAgua = Instantiate(DisparoAguaPrefab, PontoDeSaida.transform.position, Quaternion.identity);
         DisparoAgua.GetComponent<Rigidbody>().AddForce(transform.forward * 100);
         //***Som do disparo de água
@@ -268,4 +294,8 @@ public class Amy : MonoBehaviour
         ControlAnim.SetBool("Dead", true);
     }
 
+    public void MetadeAtk(bool metade)
+    {
+        metadeValorAtaque = metade;
+    }
 }
