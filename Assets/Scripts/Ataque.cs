@@ -6,6 +6,7 @@ public class Ataque : MonoBehaviour
 {
     public string nome;
     public float dano;
+    public bool DPS;
 
     // Start is called before the first frame update
     void Start()
@@ -16,6 +17,9 @@ public class Ataque : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(nome == "CirculoFogo")
+        {
+            Destroy(this.gameObject, 3f);
+        }
     }
 }

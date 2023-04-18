@@ -16,6 +16,7 @@ public class SlimeRabbit : MonoBehaviour
     public GameObject MeuAtaque;
     public GameObject EfeitoAtaquePrefab;
     public GameObject PontoDeSaida;
+    float tempoDPS = 0.0f;
 
     // NavMesh
     private Vector3 Destino;
@@ -87,11 +88,49 @@ public class SlimeRabbit : MonoBehaviour
     {
         if (colidiu.gameObject.tag == "Attack")
         {
-            float danoALevar = colidiu.gameObject.GetComponent<Ataque>().dano;
-            hp -= danoALevar;
-            ControlAnim.SetTrigger("Damage");
-            TomeiDano();
-            Destroy(colidiu.gameObject);
+            if (!colidiu.gameObject.GetComponent<Ataque>().DPS)
+            {
+                float danoALevar = colidiu.gameObject.GetComponent<Ataque>().dano;
+                hp -= danoALevar;
+                ControlAnim.SetTrigger("Damage");
+                TomeiDano();
+                Destroy(colidiu.gameObject);
+            }
+        }
+    }
+
+    private void OnTriggerStay(Collider colidiu)
+    {
+        if (colidiu.gameObject.tag == "Attack")
+        {
+            if (colidiu.gameObject.GetComponent<Ataque>().DPS)
+            {
+                float danoALevar = colidiu.gameObject.GetComponent<Ataque>().dano;
+                
+                if (tempoDPS == 0)
+                {
+                    hp -= danoALevar;
+                    ControlAnim.SetTrigger("Damage");
+                    TomeiDano();
+                    tempoDPS += Time.deltaTime;
+                }
+                else
+                {
+                    tempoDPS += Time.deltaTime;
+
+                    if(tempoDPS > 1 && tempoDPS < 2)
+                    {
+                        hp -= danoALevar;
+                        ControlAnim.SetTrigger("Damage");
+                        TomeiDano();
+                        tempoDPS = 2f;
+                    }
+                    else if (tempoDPS > 3)
+                    {
+                        tempoDPS = 0.0f;
+                    }
+                }
+            }
         }
     }
 

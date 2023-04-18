@@ -132,7 +132,10 @@ public class Amy : MonoBehaviour
 
     void ControleNivel()
     {
-        //***Atualizar barra mana
+
+        expParaProxNivel = nivel * 10;
+
+        //***Atualizar barra  nivel
 
         // Enquanto o nível não for o nível máximo, o player aumenta de nível ao ter exp suficiente, e o exp necessária para o próximo nível também aumenta
         if (exp >= expParaProxNivel && nivel != nivelMax)
@@ -146,7 +149,6 @@ public class Amy : MonoBehaviour
                 exp = 0;
             }
             nivel++;
-            expParaProxNivel += 10;
         }
         else if(nivel == nivelMax)
         {
@@ -340,20 +342,18 @@ public class Amy : MonoBehaviour
     public void AtkFogo()
     {
         AlteracaoMana(-4);
-        GameObject Fogo;
         if (GameObject.FindGameObjectWithTag("Enemy"))
         {
             GameObject Enemy = GameObject.FindGameObjectWithTag("Enemy");
-            Fogo = Instantiate(FogoPrefab, Enemy.transform.position, Quaternion.identity);
+            Instantiate(FogoPrefab, Enemy.transform.position, Quaternion.identity);
         }
         else
         {
-            Fogo = Instantiate(FogoPrefab, PontoDeSaidaFogo.transform.position, Quaternion.identity);
+            Instantiate(FogoPrefab, PontoDeSaidaFogo.transform.position, Quaternion.identity);
         }
         
         //***Som do fogo
         //DisparoAguaAudio.Play(0);
-        Destroy(Fogo, 3f);
     }
 
     private void OnTriggerEnter(Collider colidiu)
