@@ -9,7 +9,7 @@ public class Cyclope : MonoBehaviour
     public Animator ControlAnim;
 
     // Stats
-    public float hp = 10;
+    public float hp = 8;
     float expDada = 5;
 
     // Ataques
@@ -36,6 +36,7 @@ public class Cyclope : MonoBehaviour
 
     private void Update()
     {
+        Player = GameObject.FindGameObjectWithTag("Player");
         transform.LookAt(Player.transform.position);
 
         if (Player.GetComponent<Amy>())

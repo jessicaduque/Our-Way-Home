@@ -7,7 +7,7 @@ public class Zed : MonoBehaviour
 {
     // Posição 
     GerenciadorFase GerenciadorFase;
-    Vector3 ondeOlhar;
+    Vector3 frente;
 
     // NavMesh
     public Vector3 Destino;
@@ -29,10 +29,12 @@ public class Zed : MonoBehaviour
     public GameObject MeuAtaque;
     bool estaAtacando = false;
     bool levandoDano = false;
+    /**
     public GameObject FogoPrefab;
     public GameObject PontoDeSaidaFogo;
     public GameObject DisparoAguaPrefab;
     public GameObject PontoDeSaidaAgua;
+    **/
     public GameObject EscudoMagia;
     bool metadeValorAtaque = false;
 
@@ -48,11 +50,11 @@ public class Zed : MonoBehaviour
         if(PlayerPrefs.GetInt("PERSONAGEM_ATIVO") == 0)
         {
             transform.position = GerenciadorFase.PosicaoInicial;
-            Vector3 frente = transform.position - new Vector3(1, 0, 0);
+            frente = transform.position + GerenciadorFase.frenteInicial;
             transform.LookAt(frente);
 
             // Nav Mesh
-            Destino = new Vector3(0, 0, 0);
+            Destino = GerenciadorFase.PosicaoInicial;
         }
 
         // NavMesh
@@ -65,7 +67,6 @@ public class Zed : MonoBehaviour
     private void OnEnable()
     {
         LoadStats();
-        Debug.Log("foi/");
     }
 
     void Update()
@@ -152,8 +153,6 @@ public class Zed : MonoBehaviour
 
         expParaProxNivel = nivel * 10;
 
-        //***Atualizar barra  nivel
-
         // Enquanto o nível não for o nível máximo, o player aumenta de nível ao ter exp suficiente, e o exp necessária para o próximo nível também aumenta
         if (exp >= expParaProxNivel && nivel != nivelMax)
         {
@@ -200,13 +199,14 @@ public class Zed : MonoBehaviour
                     if (stamina >= 2)
                     {
                         Destino = transform.position;
-                        ControlAnim.SetTrigger("AtkAgua");
+                        ControlAnim.SetTrigger("Atk2");
                     }
                 }
 
-                // A partir do nível 4
-                if (nivel > 3)
+                // A partir do nível 3
+                if (nivel > 2)
                 {
+                    /**
                     if (Input.GetKeyDown(KeyCode.Alpha3) && !estaAtacando)
                     {
                         // Checa se escudo já está ativado
@@ -219,21 +219,23 @@ public class Zed : MonoBehaviour
                                 metadeValorAtaque = true;
                                 // ***Ativar aqui o gameobject da magia do escudo
                             }
-                        }
+                        }**/ 
+                    
+                        // CÓDIGO DE MELHORIA DA ESPADA
                     }
 
                     // A partir do nível 5
                     if (nivel > 4)
                     {
-                        if (Input.GetKeyDown(KeyCode.Alpha4) && !estaAtacando)
+                        if (Input.GetKeyDown(KeyCode.Alpha3) && !estaAtacando)
                         {
-                            if (stamina >= 4)
+                            if (stamina >= 3)
                             {
-                                ControlAnim.SetTrigger("AtkFogo");
+                                ControlAnim.SetTrigger("Atk3");
                             }
                         }
                     }
-                }
+                //}
             }
         }
     }
@@ -246,7 +248,6 @@ public class Zed : MonoBehaviour
         {
             stamina = 10;
         }
-        //***Alterar barra de stamina aqui
     }
 
     public void AlteracaoVida(float alteracaoHP)
@@ -271,8 +272,6 @@ public class Zed : MonoBehaviour
         {
             Morrer();
         }
-
-        //***Alterar barra de vida aqui
 
     }
 
@@ -322,7 +321,6 @@ public class Zed : MonoBehaviour
         }
     }
 
-    /*
     public void AtivarAtk()
     {
         MeuAtaque.SetActive(true);
@@ -332,7 +330,8 @@ public class Zed : MonoBehaviour
     {
         MeuAtaque.SetActive(false);
     }
-    */
+
+    /**
     public void AtkAgua()
     {
         AlteracaoStamina(-2);
@@ -359,6 +358,7 @@ public class Zed : MonoBehaviour
         //***Som do fogo
         //DisparoAguaAudio.Play(0);
     }
+    **/
 
     private void OnTriggerEnter(Collider colidiu)
     {

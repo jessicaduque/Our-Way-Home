@@ -7,6 +7,7 @@ public class GerenciadorFase : MonoBehaviour
 {
     // Variáveis para início de fase
     public Vector3 PosicaoInicial;
+    public Vector3 frenteInicial;
     public GameObject Amy;
     public GameObject Zed;
     public GameObject PersonagemAtivo;

@@ -7,7 +7,7 @@ public class Amy : MonoBehaviour
 {
     // Posição 
     GerenciadorFase GerenciadorFase;
-    Vector3 ondeOlhar;
+    Vector3 frente;
 
     // NavMesh
     public Vector3 Destino;
@@ -47,11 +47,11 @@ public class Amy : MonoBehaviour
         if (PlayerPrefs.GetInt("PERSONAGEM_ATIVO") == 1)
         {
             transform.position = GerenciadorFase.PosicaoInicial;
-            Vector3 frente = transform.position - new Vector3(1, 0, 0);
+            frente = transform.position + GerenciadorFase.frenteInicial;
             transform.LookAt(frente);
 
             // Nav Mesh
-            Destino = new Vector3(0, 0, 0);
+            Destino = GerenciadorFase.PosicaoInicial;
         }
 
         // NavMesh
