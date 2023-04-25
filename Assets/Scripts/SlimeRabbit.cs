@@ -70,7 +70,6 @@ public class SlimeRabbit : MonoBehaviour
             }
             else
             {
-                /**
                 if (Player.GetComponent<Zed>().vivo)
                 {
                     ControlAnim.SetBool("Attacking", true);
@@ -78,7 +77,7 @@ public class SlimeRabbit : MonoBehaviour
                 else
                 {
                     ControlAnim.SetBool("Attacking", false);
-                }**/
+                }
             }
             
         }
@@ -141,12 +140,12 @@ public class SlimeRabbit : MonoBehaviour
             if (Player.GetComponent<Amy>())
             {
                 Player.GetComponent<Amy>().AlteracaoEXP((expDada / 4) * 3);
-                //Player.GetComponent<Zed>().AlteracaoEXP(expDada / 4);
+                Player.GetComponent<Zed>().AlteracaoEXP(expDada / 4);
             }
             else
             {
                 Player.GetComponent<Amy>().AlteracaoEXP(expDada / 4);
-                //Player.GetComponent<Zed>().AlteracaoEXP((expDada / 4) * 3);
+                Player.GetComponent<Zed>().AlteracaoEXP((expDada / 4) * 3);
             }
             GameObject.FindGameObjectWithTag("GameController").GetComponent<GerenciadorFase>().InimigoMorreu();
             ControlAnim.SetTrigger("Death");

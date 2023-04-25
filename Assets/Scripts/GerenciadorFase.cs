@@ -33,9 +33,6 @@ public class GerenciadorFase : MonoBehaviour
         // Controle personagem ativo
         ControlePersonagemAtivo();
 
-        // Controle UI
-        ControleAtaquesUI();
-
         // InimigosVivos
         ControleAvancarFase();
     }
@@ -70,52 +67,26 @@ public class GerenciadorFase : MonoBehaviour
 
     void ZedAtivo()
     {
+        intPersonagemAtivo = 0;
         Zed.transform.position = Amy.transform.position;
         Zed.GetComponent<Zed>().Destino = Amy.GetComponent<Amy>().Destino;
         Zed.transform.LookAt(Amy.GetComponent<Amy>().Destino);
         PersonagemAtivo = Zed;
-        intPersonagemAtivo = 0;
         Amy.GetComponent<Amy>().MetadeAtk(false);
-        Zed.SetActive(true);
         Amy.SetActive(false);
+        Zed.SetActive(true);
     }
 
     void AmyAtivo()
     {
+        intPersonagemAtivo = 1;
         Amy.transform.position = Zed.transform.position;
         Amy.GetComponent<Amy>().Destino = Zed.GetComponent<Zed>().Destino;
         Amy.transform.LookAt(Zed.GetComponent<Zed>().Destino);
         PersonagemAtivo = Amy;
-        intPersonagemAtivo = 1;
         Zed.GetComponent<Zed>().MetadeAtk(false);
         Zed.SetActive(false);
         Amy.SetActive(true);
-    }
-
-    void ControleAtaquesUI()
-    {
-        if(PlayerPrefs.GetInt("PERSONAGEM_ATIVO") == 0)
-        {
-            GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>().UIZed();
-            //***Ataques de acordo com níveis do Zed
-        }
-        else
-        {
-            GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>().UIAmy();
-            int nivel = PlayerPrefs.GetInt("AMY_NIVEL");
-            if (nivel > 1 && nivel < 4)
-            {
-                //***Ativar botão atk água
-            }
-            else if(nivel < 5)
-            {
-                //***Ativar botão magia escudo
-            }
-            else if (nivel == 5)
-            {
-                //***Ativar botão atk fogo
-            }
-        }
     }
 
     public void LoadFase(int faseParaIr)

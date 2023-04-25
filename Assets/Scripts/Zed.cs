@@ -40,7 +40,8 @@ public class Zed : MonoBehaviour
     void Start()
     {
         // Stats
-        loadStats();
+        LoadStats();
+        stamina = 10;
 
         // Inicio Posição
         GerenciadorFase = GameObject.FindGameObjectWithTag("GameController").GetComponent<GerenciadorFase>();
@@ -61,8 +62,14 @@ public class Zed : MonoBehaviour
         ControlAnim = GetComponent<Animator>();
     }
 
+    private void OnEnable()
+    {
+        LoadStats();
+        Debug.Log("foi/");
+    }
+
     void Update()
-    { 
+    {
         //// Mover
         NavMeshMover();
         ControleAnimacaoMover();
@@ -76,8 +83,11 @@ public class Zed : MonoBehaviour
         SalvarStats();
         // Exp
         ControleNivel();
-    }
 
+        // Atualizar UI
+        GameObject.FindGameObjectWithTag("Canvas").GetComponent<CanvasController>().UIZedDados();
+
+    }
     void ControleAnimacaoMover()
     {
         if (Agente.velocity.magnitude > 0)
@@ -228,7 +238,7 @@ public class Zed : MonoBehaviour
         }
     }
 
-    void AlteracaoStamina(float alteracaoStamina)
+    public void AlteracaoStamina(float alteracaoStamina)
     {
         stamina += alteracaoStamina;
 
@@ -239,10 +249,8 @@ public class Zed : MonoBehaviour
         //***Alterar barra de stamina aqui
     }
 
-    void AlteracaoVida(float alteracaoHP)
+    public void AlteracaoVida(float alteracaoHP)
     {
-
-
         // Se a alteração de hp for negativo (significando que o player levou o ataque, e não uma cura), verifica se o ataque deve ser ou não diminuído pela metade
         if (metadeValorAtaque && alteracaoHP < 0)
         {
@@ -274,12 +282,12 @@ public class Zed : MonoBehaviour
         //***Alterar barra de exp aqui
     }
 
-    void loadStats()
+    void LoadStats()
     {
         nivel = PlayerPrefs.GetInt("ZED_NIVEL");
         exp = PlayerPrefs.GetFloat("ZED_EXP");
         hp = PlayerPrefs.GetFloat("ZED_VIDA");
-        //stamina = PlayerPrefs.GetFloat("AMY_MANA");
+        stamina = PlayerPrefs.GetFloat("ZED_STAMINA");
     }
 
     public void SalvarStats()
@@ -287,7 +295,7 @@ public class Zed : MonoBehaviour
         PlayerPrefs.SetInt("ZED_NIVEL", nivel);
         PlayerPrefs.SetFloat("ZED_EXP", exp);
         PlayerPrefs.SetFloat("ZED_VIDA", hp);
-        //PlayerPrefs.SetFloat("AMY_MANA", mana);
+        PlayerPrefs.SetFloat("ZED_STAMINA", stamina);
     }
 
     public void EstaAtacando(int atacando)

@@ -7,13 +7,11 @@ public class Escudo : MonoBehaviour
     GerenciadorFase GerenciadorFase;
     float tempo = 0.0f;
 
-    // Start is called before the first frame update
     void Start()
     {
         GerenciadorFase = GameObject.FindGameObjectWithTag("GameController").GetComponent<GerenciadorFase>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         transform.position = GerenciadorFase.PersonagemAtivo.transform.position + new Vector3(0, 0.22f, 0);
@@ -39,7 +37,7 @@ public class Escudo : MonoBehaviour
         }
         else
         {
-            //GerenciadorFase.PersonagemAtivo.GetComponent<Zed>().MetadeAtk(ligado);
+            GerenciadorFase.PersonagemAtivo.GetComponent<Zed>().MetadeAtk(ligado);
         }
     }
 }

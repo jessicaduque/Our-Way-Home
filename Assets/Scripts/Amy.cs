@@ -36,11 +36,11 @@ public class Amy : MonoBehaviour
     public GameObject EscudoMagia;
     bool metadeValorAtaque = false;
 
-
     void Start()
     {
         // Stats
-        loadStats();
+        LoadStats();
+        mana = 10;
 
         // Inicio Posição
         GerenciadorFase = GameObject.FindGameObjectWithTag("GameController").GetComponent<GerenciadorFase>();
@@ -62,8 +62,7 @@ public class Amy : MonoBehaviour
     }
 
     void Update()
-    { 
-
+    {
         //// Mover
         NavMeshMover();
         ControleAnimacaoMover();
@@ -77,6 +76,9 @@ public class Amy : MonoBehaviour
         SalvarStats();
         // Exp
         ControleNivel();
+
+        // Atualizar UI
+        GameObject.FindGameObjectWithTag("Canvas").GetComponent<CanvasController>().UIAmyDados();
     }
 
     void ControleAnimacaoMover()
@@ -180,10 +182,26 @@ public class Amy : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha1) && !estaAtacando)
             {
                 // Controle mana é um pois gasta 2 para a magia, e 3 é ganho. O resultado final assim é 1.
-                if(mana >= 2 && (hp < 10 || mana < 10))
+                if (mana >= 2 && ((hp < 10 || mana < 10) || (PlayerPrefs.GetFloat("ZED_VIDA") < 10 || PlayerPrefs.GetFloat("ZED_STAMINA") < 10)))
                 {
-                    //ControleStaminaZed(3);
-                    //ControleVidaZed(3);
+                    if(PlayerPrefs.GetFloat("ZED_VIDA") >= 7)
+                    {
+                        PlayerPrefs.SetFloat("ZED_VIDA", 10);
+                    }
+                    else
+                    {
+                        PlayerPrefs.SetFloat("ZED_VIDA", (PlayerPrefs.GetFloat("ZED_VIDA") + 3));
+                    }
+
+                    if (PlayerPrefs.GetFloat("ZED_STAMINA") >= 7)
+                    {
+                        PlayerPrefs.SetFloat("ZED_STAMINA", 10);
+                    }
+                    else
+                    {
+                        PlayerPrefs.SetFloat("ZED_STAMINA", (PlayerPrefs.GetFloat("ZED_STAMINA") + 3));
+                    }
+
                     Destino = transform.position;
                     ControlAnim.SetTrigger("Cura");
                 }
@@ -214,7 +232,6 @@ public class Amy : MonoBehaviour
                                 Destino = transform.position;
                                 ControlAnim.SetTrigger("EscudoMagia");
                                 metadeValorAtaque = true;
-                                // ***Ativar aqui o gameobject da magia do escudo
                             }
                         }
                     }
@@ -286,7 +303,7 @@ public class Amy : MonoBehaviour
         EscudoMagia.gameObject.SetActive(true);
     }
 
-    void loadStats()
+    void LoadStats()
     {
         nivel = PlayerPrefs.GetInt("AMY_NIVEL");
         exp = PlayerPrefs.GetFloat("AMY_EXP");

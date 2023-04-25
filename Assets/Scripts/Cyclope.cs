@@ -52,7 +52,6 @@ public class Cyclope : MonoBehaviour
         }
         else
         {
-            /**
             if (Player.GetComponent<Zed>().vivo)
             {
                 // Movimentação
@@ -62,7 +61,6 @@ public class Cyclope : MonoBehaviour
                 ControleAnimacaoAtaque();
                 ControleCooldownAtaque();
             }
-            **/
         }
     }
 
@@ -86,37 +84,28 @@ public class Cyclope : MonoBehaviour
         }
         else
         {
-            if(estadoAtaque == 0)
-            {
-                ControlAnim.SetTrigger("Attack");
-            }
             ControlAnim.SetBool("Move", false);
 
-            /**
             if (Player.GetComponent<Amy>())
             {
                 if (Player.GetComponent<Amy>().vivo)
                 {
-                    ControlAnim.SetBool("Attacking", true);
-                }
-                else
-                {
-                    ControlAnim.SetBool("Attacking", false);
+                    if (estadoAtaque == 0)
+                    {
+                        ControlAnim.SetTrigger("Attack");
+                    }
                 }
             }
             else
             {
-                /**
                 if (Player.GetComponent<Zed>().vivo)
                 {
-                    ControlAnim.SetBool("Attacking", true);
-                }
-                else
-                {
-                    ControlAnim.SetBool("Attacking", false);
+                    if (estadoAtaque == 0)
+                    {
+                        ControlAnim.SetTrigger("Attack");
+                    }
                 }
             }
-        **/
         }
     }
 
@@ -190,12 +179,12 @@ public class Cyclope : MonoBehaviour
             if (Player.GetComponent<Amy>())
             {
                 Player.GetComponent<Amy>().AlteracaoEXP((expDada / 4) * 3);
-                //Player.GetComponent<Zed>().AlteracaoEXP(expDada / 4);
+                Player.GetComponent<Zed>().AlteracaoEXP(expDada / 4);
             }
             else
             {
                 Player.GetComponent<Amy>().AlteracaoEXP(expDada / 4);
-                //Player.GetComponent<Zed>().AlteracaoEXP((expDada / 4) * 3);
+                Player.GetComponent<Zed>().AlteracaoEXP((expDada / 4) * 3);
             }
             GameObject.FindGameObjectWithTag("GameController").GetComponent<GerenciadorFase>().InimigoMorreu();
             ControlAnim.SetTrigger("Death");
