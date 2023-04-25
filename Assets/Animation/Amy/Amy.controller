@@ -1303,7 +1303,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Die01_SwordAndShield
+  m_Name: Death
   m_Speed: 0.8
   m_CycleOffset: 0
   m_Transitions: []
@@ -1316,7 +1316,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 1827226128182048838, guid: 5940bb0b55717a746bbbe4d3e47e7e39, type: 3}
+  m_Motion: {fileID: 7400000, guid: 36a15e14985e3714fbd29e9b5999b684, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

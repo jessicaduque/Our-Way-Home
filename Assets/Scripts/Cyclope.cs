@@ -10,13 +10,13 @@ public class Cyclope : MonoBehaviour
 
     // Stats
     public float hp = 10;
-    float expDada = 4;
+    float expDada = 5;
 
     // Ataques
     public GameObject MeuAtaque;
-    public GameObject EfeitoAtaquePrefab;
-    public GameObject PontoDeSaida;
     float tempoDPS = 0.0f;
+    int estadoAtaque = 0;
+    float tempoCooldownAtaque = 0.0f;
 
     // NavMesh
     private Vector3 Destino;
@@ -25,6 +25,8 @@ public class Cyclope : MonoBehaviour
 
     private void Start()
     {
+        Player = GameObject.FindGameObjectWithTag("Player");
+
         // Animador
         ControlAnim = GetComponent<Animator>();
 
@@ -34,29 +36,63 @@ public class Cyclope : MonoBehaviour
 
     private void Update()
     {
-        // Movimentação
-        NavMeshMover();
+        transform.LookAt(Player.transform.position);
 
-        // Ataques
-        ControleAnimacaoAtaque();
+        if (Player.GetComponent<Amy>())
+        {
+            if (Player.GetComponent<Amy>().vivo)
+            {
+                // Movimentação
+                NavMeshMover();
+
+                // Ataques
+                ControleAnimacaoAtaque();
+                ControleCooldownAtaque();
+            }
+        }
+        else
+        {
+            /**
+            if (Player.GetComponent<Zed>().vivo)
+            {
+                // Movimentação
+                NavMeshMover();
+
+                // Ataques
+                ControleAnimacaoAtaque();
+                ControleCooldownAtaque();
+            }
+            **/
+        }
     }
 
     void NavMeshMover()
     {
-        Player = GameObject.FindGameObjectWithTag("Player");
-        Destino = Player.transform.position;
-        Agente.stoppingDistance = 0.8f;
-        Agente.SetDestination(Destino);
+        if (estadoAtaque == 0)
+        {
+            Player = GameObject.FindGameObjectWithTag("Player");
+            Destino = Player.transform.position;
+            // A mudar para o ataque
+            Agente.stoppingDistance = 0.2f;
+            Agente.SetDestination(Destino);
+        }
     }
 
     void ControleAnimacaoAtaque()
     {
         if (Agente.velocity.magnitude > 0)
         {
-            ControlAnim.SetBool("Attacking", false);
+            ControlAnim.SetBool("Move", true);
         }
         else
         {
+            if(estadoAtaque == 0)
+            {
+                ControlAnim.SetTrigger("Attack");
+            }
+            ControlAnim.SetBool("Move", false);
+
+            /**
             if (Player.GetComponent<Amy>())
             {
                 if (Player.GetComponent<Amy>().vivo)
@@ -78,9 +114,22 @@ public class Cyclope : MonoBehaviour
                 else
                 {
                     ControlAnim.SetBool("Attacking", false);
-                }**/
+                }
             }
+        **/
+        }
+    }
 
+    void ControleCooldownAtaque()
+    {
+        if(estadoAtaque == 2)
+        {
+            tempoCooldownAtaque += Time.deltaTime;
+            if(tempoCooldownAtaque > 1.5)
+            {
+                tempoCooldownAtaque = 0.0f;
+                estadoAtaque = 0;
+            }
         }
     }
 
@@ -154,16 +203,16 @@ public class Cyclope : MonoBehaviour
         }
     }
 
-    public void EfeitoAtaque()
+    public void AtivarAtk()
     {
-        GameObject Efeito = Instantiate(EfeitoAtaquePrefab, PontoDeSaida.transform.position, Quaternion.identity);
-        Efeito.GetComponent<randomParticleRotation>().InimigoCriador = this.gameObject;
-        //***Som do efeito
-        //DisparoAguaAudio.Play(0);
+        MeuAtaque.SetActive(true);
+        estadoAtaque = 1;
     }
 
-    public void Ataque()
+    public void DesativarAtk()
     {
-        Instantiate(MeuAtaque, Player.transform.position + new Vector3(0, 0.3f, 0), Quaternion.identity);
+        MeuAtaque.SetActive(false);
+        estadoAtaque = 2;
     }
+    
 }

@@ -10,12 +10,12 @@ public class Amy : MonoBehaviour
     Vector3 ondeOlhar;
 
     // NavMesh
-    private Vector3 Destino;
+    public Vector3 Destino;
     private NavMeshAgent Agente;
 
     // Stats 
     public float hp;
-    public float mana;
+    public float mana = 10;
     public float exp;
     public float expParaProxNivel = 10;
     public int nivel;
@@ -44,10 +44,17 @@ public class Amy : MonoBehaviour
 
         // Inicio Posição
         GerenciadorFase = GameObject.FindGameObjectWithTag("GameController").GetComponent<GerenciadorFase>();
-        transform.position = GerenciadorFase.PosicaoInicial;
+        if (PlayerPrefs.GetInt("PERSONAGEM_ATIVO") == 1)
+        {
+            transform.position = GerenciadorFase.PosicaoInicial;
+            Vector3 frente = transform.position - new Vector3(1, 0, 0);
+            transform.LookAt(frente);
+
+            // Nav Mesh
+            Destino = new Vector3(0, 0, 0);
+        }
 
         // NavMesh
-        Destino = new Vector3(0, 0, 0);
         Agente = GetComponent<NavMeshAgent>();
 
         // Animador
@@ -55,7 +62,8 @@ public class Amy : MonoBehaviour
     }
 
     void Update()
-    {
+    { 
+
         //// Mover
         NavMeshMover();
         ControleAnimacaoMover();
@@ -283,7 +291,7 @@ public class Amy : MonoBehaviour
         nivel = PlayerPrefs.GetInt("AMY_NIVEL");
         exp = PlayerPrefs.GetFloat("AMY_EXP");
         hp = PlayerPrefs.GetFloat("AMY_VIDA");
-        mana = PlayerPrefs.GetFloat("AMY_MANA");
+        //mana = PlayerPrefs.GetFloat("AMY_MANA");
     }
 
     public void SalvarStats()
@@ -291,7 +299,7 @@ public class Amy : MonoBehaviour
         PlayerPrefs.SetInt("AMY_NIVEL", nivel);
         PlayerPrefs.SetFloat("AMY_EXP", exp);
         PlayerPrefs.SetFloat("AMY_VIDA", hp);
-        PlayerPrefs.SetFloat("AMY_MANA", mana);
+        //PlayerPrefs.SetFloat("AMY_MANA", mana);
     }
 
     public void EstaAtacando(int atacando)
@@ -317,18 +325,6 @@ public class Amy : MonoBehaviour
             levandoDano = false;
         }
     }
-
-    /*
-    public void AtivarAtk()
-    {
-        MeuAtaque.SetActive(true);
-    }
-
-    public void DesativarAtk()
-    {
-        MeuAtaque.SetActive(false);
-    }
-    */
     public void AtkAgua()
     {
         AlteracaoMana(-2);
@@ -370,11 +366,13 @@ public class Amy : MonoBehaviour
                     Morrer();
                 }
             }
-            Destroy(colidiu.gameObject);
-
+            // Não destruir o ataque do cyclope pois esse não é um instantiate, ele é ligado e desligado
+            if(colidiu.gameObject.GetComponent<Ataque>().nome != "MordidaCyclope")
+            {
+                Destroy(colidiu.gameObject);
+            }
         }
     }
-
 
     public void Morrer()
     {

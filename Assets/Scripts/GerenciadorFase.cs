@@ -71,6 +71,8 @@ public class GerenciadorFase : MonoBehaviour
     void ZedAtivo()
     {
         Zed.transform.position = Amy.transform.position;
+        Zed.GetComponent<Zed>().Destino = Amy.GetComponent<Amy>().Destino;
+        Zed.transform.LookAt(Amy.GetComponent<Amy>().Destino);
         PersonagemAtivo = Zed;
         intPersonagemAtivo = 0;
         Amy.GetComponent<Amy>().MetadeAtk(false);
@@ -81,9 +83,11 @@ public class GerenciadorFase : MonoBehaviour
     void AmyAtivo()
     {
         Amy.transform.position = Zed.transform.position;
+        Amy.GetComponent<Amy>().Destino = Zed.GetComponent<Zed>().Destino;
+        Amy.transform.LookAt(Zed.GetComponent<Zed>().Destino);
         PersonagemAtivo = Amy;
         intPersonagemAtivo = 1;
-        //Zed.GetComponent<Zed>().MetadeAtk(false);
+        Zed.GetComponent<Zed>().MetadeAtk(false);
         Zed.SetActive(false);
         Amy.SetActive(true);
     }

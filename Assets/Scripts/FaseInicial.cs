@@ -7,6 +7,9 @@ public class FaseInicial : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Iniciar Amy como personagem ativa na primeira fase
+        PlayerPrefs.SetInt("PERSONAGEM_ATIVO", 1);
+
         // Setar os stats iniciais dos personagens
         PlayerPrefs.SetInt("AMY_NIVEL", 1);
         PlayerPrefs.SetFloat("AMY_EXP", 0);

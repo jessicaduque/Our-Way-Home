@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Canvas : MonoBehaviour
 {
+    // Amy
+
+
+    // Zed
+
     // Start is called before the first frame update
     void Start()
     {
