@@ -17,7 +17,6 @@ public class Devil : MonoBehaviour
     public GameObject PontoSaida;
     public GameObject PrefabFogo;
     float tempoDPS = 0.0f;
-    float tempoCooldownAtaque = 0.0f;
 
     // NavMesh
     private Vector3 Destino;

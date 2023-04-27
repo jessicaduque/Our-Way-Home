@@ -17,7 +17,7 @@ public class Ataque : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(nome == "CirculoFogo")
+        if(nome == "CirculoFogo" || nome == "Slash")
         {
             Destroy(this.gameObject, 3f);
         }

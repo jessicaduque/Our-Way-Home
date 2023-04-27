@@ -4448,7 +4448,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 405943159361341238, guid: 922a05486b479e241a295ae1d8fc3319, type: 3}
       propertyPath: m_Name
-      value: PassarFase - 2
+      value: PassarFase - Boss
       objectReference: {fileID: 0}
     - target: {fileID: 405943159361341240, guid: 922a05486b479e241a295ae1d8fc3319, type: 3}
       propertyPath: m_Enabled
@@ -4500,7 +4500,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 405943159361341245, guid: 922a05486b479e241a295ae1d8fc3319, type: 3}
       propertyPath: faseParaIr
-      value: 2
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 922a05486b479e241a295ae1d8fc3319, type: 3}

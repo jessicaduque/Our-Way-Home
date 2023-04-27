@@ -21,6 +21,8 @@ public class Zed : MonoBehaviour
     public int nivel;
     int nivelMax = 5;
     public bool vivo = true;
+    bool invulneravel = false;
+    bool metadeValorAtaque = false;
 
     // Animador
     private Animator ControlAnim;
@@ -29,15 +31,10 @@ public class Zed : MonoBehaviour
     public GameObject MeuAtaque;
     bool estaAtacando = false;
     bool levandoDano = false;
-    /**
-    public GameObject FogoPrefab;
-    public GameObject PontoDeSaidaFogo;
-    public GameObject DisparoAguaPrefab;
-    public GameObject PontoDeSaidaAgua;
-    **/
+    public GameObject PontoSaidaAtk2;
+    public GameObject[] PontoSaidaAtk3Lista;
+    public GameObject prefabSlash;
     public GameObject EscudoMagia;
-    bool metadeValorAtaque = false;
-
 
     void Start()
     {
@@ -179,10 +176,12 @@ public class Zed : MonoBehaviour
         {
             Destino = transform.position;
             ControlAnim.SetBool("Escudo", true);
+            invulneravel = true;
         }
         // Se escudo não tiver ativado, outros ataques podem ser ativados
         else
         {
+            invulneravel = false;
             ControlAnim.SetBool("Escudo", false);
 
             if (Input.GetKeyDown(KeyCode.Alpha1) && !estaAtacando)
@@ -331,17 +330,30 @@ public class Zed : MonoBehaviour
         MeuAtaque.SetActive(false);
     }
 
-    /**
-    public void AtkAgua()
+    
+    public void Atk2()
     {
         AlteracaoStamina(-2);
-        GameObject DisparoAgua = Instantiate(DisparoAguaPrefab, PontoDeSaidaAgua.transform.position, Quaternion.identity);
-        DisparoAgua.GetComponent<Rigidbody>().AddForce(transform.forward * 90);
+        GameObject Slash = Instantiate(prefabSlash, PontoSaidaAtk2.transform.position, Quaternion.identity);
+        Slash.transform.rotation = Quaternion.AngleAxis(90, Vector3.down) * transform.rotation;
+        Slash.GetComponent<Rigidbody>().AddForce(transform.forward * 140);
         //***Som do disparo de água
         //DisparoAguaAudio.Play(0);
-        Destroy(DisparoAgua, 1f);
     }
 
+    public void Atk3()
+    {
+        AlteracaoStamina(-4);
+        for(int i = 0; i < PontoSaidaAtk3Lista.Length; i++)
+        {
+            GameObject Slash = Instantiate(prefabSlash, PontoSaidaAtk3Lista[i].transform.position, Quaternion.identity);
+            Slash.transform.rotation = Quaternion.AngleAxis(90, Vector3.down) * PontoSaidaAtk3Lista[i].transform.rotation;
+            Slash.GetComponent<Rigidbody>().AddForce(PontoSaidaAtk3Lista[i].transform.forward * 140);
+        }
+        //***Som do disparo de água
+        //DisparoAguaAudio.Play(0);
+    }
+    /**
     public void AtkFogo()
     {
         AlteracaoStamina(-4);
@@ -364,7 +376,7 @@ public class Zed : MonoBehaviour
     {
         if (colidiu.gameObject.tag == "EnemyAttack")
         {
-            if (vivo == true)
+            if (vivo == true && !invulneravel)
             {
                 float danoALevar = colidiu.gameObject.GetComponent<Ataque>().dano;
                 AlteracaoVida(-danoALevar);

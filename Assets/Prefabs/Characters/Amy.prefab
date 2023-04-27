@@ -1550,7 +1550,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4128976978587147507}
-  m_LocalRotation: {x: -0.025034064, y: -0.06244233, z: 0.0012542871, w: 0.9977338}
+  m_LocalRotation: {x: -0.025034066, y: -0.06244233, z: 0.0012542872, w: 0.9977338}
   m_LocalPosition: {x: -0.12562485, y: -0.012257216, z: -0.0020234145}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2638,6 +2638,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a18943214209534591cb880192efe7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Destino: {x: 0, y: 0, z: 0}
   hp: 10
   mana: 10
   exp: 0

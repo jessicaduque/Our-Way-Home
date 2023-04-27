@@ -21,6 +21,8 @@ public class Amy : MonoBehaviour
     public int nivel;
     int nivelMax = 5;
     public bool vivo = true;
+    bool invulneravel = false;
+    bool metadeValorAtaque = false;
 
     // Animador
     private Animator ControlAnim;
@@ -34,7 +36,6 @@ public class Amy : MonoBehaviour
     public GameObject DisparoAguaPrefab;
     public GameObject PontoDeSaidaAgua;
     public GameObject EscudoMagia;
-    bool metadeValorAtaque = false;
 
     void Start()
     {
@@ -173,11 +174,13 @@ public class Amy : MonoBehaviour
         {
             Destino = transform.position;
             ControlAnim.SetBool("Escudo", true);
+            invulneravel = true;
         }
         // Se escudo não tiver ativado, outros ataques podem ser ativados
         else
         {
             ControlAnim.SetBool("Escudo", false);
+            invulneravel = false;
 
             if (Input.GetKeyDown(KeyCode.Alpha1) && !estaAtacando)
             {
@@ -373,7 +376,7 @@ public class Amy : MonoBehaviour
     {
         if (colidiu.gameObject.tag == "EnemyAttack")
         {
-            if (vivo == true)
+            if (vivo == true && !invulneravel)
             {
                 float danoALevar = colidiu.gameObject.GetComponent<Ataque>().dano;
                 AlteracaoVida(-danoALevar);
