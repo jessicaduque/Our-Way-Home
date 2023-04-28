@@ -15,12 +15,14 @@ public class FaseInicial : MonoBehaviour
 
     public GameObject DialoguePanel;
     public Text NomeFalante_Text;
+    public Image NomeFalante_Image;
     public Image Falante_Amy_Image;
     public Image Falante_Zed_Image;
 
     // Start is called before the first frame update
     void Start()
     {
+        DialoguePanel.SetActive(false);
         falasRodando = true;
         falaTexto.text = "";
 
@@ -131,27 +133,23 @@ public class FaseInicial : MonoBehaviour
         if (numeroFala == 10)
         {
             FalanteNarrador();
-            falaTexto.text = "Bem vindo(a)! Vou te ajudar aqui a conseguir guiar estes dois de volta para casa.";
+            falaTexto.text = "<b>Bem vindo(a)! Vou te ajudar aqui a conseguir guiar estes dois de volta para casa.</b>";
         }
         if (numeroFala == 11)
         {
-            FalanteNarrador();
-            falaTexto.text = "Você pode mover eles com um simples clique do mouse.";
+            falaTexto.text = "<b>Você pode mover eles com um simples clique do mouse.</b>";
         }
         if (numeroFala == 12)
         {
-            FalanteNarrador();
-            falaTexto.text = "Para trocar o personagem ativo, só apertar a barra de espaço.";
+            falaTexto.text = "<b>Para trocar o personagem ativo, aperte a barra de espaço.</b>";
         }
         if (numeroFala == 13)
         {
-            FalanteNarrador();
-            falaTexto.text = "Para usar as ações de cada, só usar as teclas númericas.";
+            falaTexto.text = "<b>Para usar as ações de cada, só usar as teclas númericas.</b>";
         }
         if (numeroFala == 14)
         {
-            FalanteNarrador();
-            falaTexto.text = "Vamos, tente aí!";
+            falaTexto.text = "<b>Vamos, tente aí!</b>";
         }
     }
 
@@ -166,6 +164,7 @@ public class FaseInicial : MonoBehaviour
         {
             if (tempo >= 1f)
             {
+                DialoguePanel.SetActive(true);
                 ScriptFalas();
             }
         }
@@ -177,21 +176,6 @@ public class FaseInicial : MonoBehaviour
             GetComponent<GerenciadorFase>().enabled = true;
             this.enabled = false;
         }
-        /**
-        else if (numeroFala == 4 || numeroFala == 5 || numeroFala == 7)
-        {
-            if (numeroFala == 5)
-            {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    falaTexto.text = "";
-                }
-            }
-            else if (Input.GetMouseButtonDown(0))
-            {
-                falasRodando = false;
-            }
-        }**/
         else
         {
             ScriptFalas();
@@ -203,17 +187,20 @@ public class FaseInicial : MonoBehaviour
         NomeFalante_Text.text = "Amy";
         Falante_Zed_Image.gameObject.SetActive(false);
         Falante_Amy_Image.gameObject.SetActive(true);
+        NomeFalante_Image.gameObject.SetActive(true);
     }
     void FalanteZed()
     {
         NomeFalante_Text.text = "Zed";
         Falante_Amy_Image.gameObject.SetActive(false);
         Falante_Zed_Image.gameObject.SetActive(true);
+        NomeFalante_Image.gameObject.SetActive(true);
     }
     void FalanteNarrador()
     {
         NomeFalante_Text.text = "";
         Falante_Zed_Image.gameObject.SetActive(false);
         Falante_Amy_Image.gameObject.SetActive(false);
+        NomeFalante_Image.gameObject.SetActive(false);
     }
 }

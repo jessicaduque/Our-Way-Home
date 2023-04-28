@@ -9,7 +9,7 @@ public class SlimeRabbit : MonoBehaviour
     public Animator ControlAnim;
 
     // Stats
-    public float hp = 5;
+    public float hp = 4;
     float expDada = 4;
     bool vivo = true;
 

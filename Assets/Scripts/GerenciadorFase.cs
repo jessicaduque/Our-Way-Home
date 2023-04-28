@@ -60,7 +60,7 @@ public class GerenciadorFase : MonoBehaviour
 
         if (faseAtual == 2)
         {
-            if (PlayerPrefs.GetInt("FASE2") == 1)
+            if (PlayerPrefs.GetInt("FASE2") >= 1)
             {
                 GameObject[] Inimigos;
                 Inimigos = GameObject.FindGameObjectsWithTag("Enemy");

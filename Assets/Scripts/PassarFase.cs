@@ -42,7 +42,14 @@ public class PassarFase : MonoBehaviour
         }
         if (faseAtual == 2)
         {
-            PlayerPrefs.SetInt("FASE2", 1);
+            if(PlayerPrefs.GetInt("FASE2") == 0)
+            {
+                PlayerPrefs.SetInt("FASE2", 1);
+            }
+            else
+            {
+                PlayerPrefs.SetInt("FASE2", 2);
+            }
         }
         if (faseAtual == 3)
         {
