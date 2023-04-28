@@ -1104,7 +1104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nome: MordidaCyclope
-  dano: 3
+  dano: 0.8
   DPS: 0
 --- !u!54 &181298634038327362
 Rigidbody:
@@ -1197,6 +1197,7 @@ GameObject:
   - component: {fileID: 274807679686275554}
   - component: {fileID: 181298635035851680}
   - component: {fileID: 181298635035851695}
+  - component: {fileID: 1190371436}
   m_Layer: 0
   m_Name: Cyclope
   m_TagString: Enemy
@@ -1290,6 +1291,19 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!65 &1190371436
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182370098235573754}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1.2300689, z: 1}
+  m_Center: {x: 0, y: 0.6000005, z: 0}
 --- !u!1 &182380354354563178
 GameObject:
   m_ObjectHideFlags: 0

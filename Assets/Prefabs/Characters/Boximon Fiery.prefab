@@ -329,6 +329,7 @@ GameObject:
   - component: {fileID: 8863555409305150107}
   - component: {fileID: 8814548690900893051}
   - component: {fileID: 8814548690900893048}
+  - component: {fileID: 1118739882}
   m_Layer: 0
   m_Name: Boximon Fiery
   m_TagString: Enemy
@@ -423,6 +424,19 @@ MonoBehaviour:
   hp: 12
   PontoSaida: {fileID: 8814548690324731245}
   PrefabFogo: {fileID: 3995360560509864625, guid: b78eebccf76999649942f7067d13124d, type: 3}
+--- !u!65 &1118739882
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8814834441380775843}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1.2300689, z: 1}
+  m_Center: {x: 0, y: 0.6000005, z: 0}
 --- !u!1 &8814969852222809901
 GameObject:
   m_ObjectHideFlags: 0

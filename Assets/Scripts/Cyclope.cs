@@ -41,7 +41,7 @@ public class Cyclope : MonoBehaviour
 
         if (Player.GetComponent<Amy>())
         {
-            if (Player.GetComponent<Amy>().vivo)
+            if (Player.GetComponent<Amy>().vivo == 1)
             {
                 // Movimentação
                 NavMeshMover();
@@ -53,7 +53,7 @@ public class Cyclope : MonoBehaviour
         }
         else
         {
-            if (Player.GetComponent<Zed>().vivo)
+            if (Player.GetComponent<Zed>().vivo == 1)
             {
                 // Movimentação
                 NavMeshMover();
@@ -89,7 +89,7 @@ public class Cyclope : MonoBehaviour
 
             if (Player.GetComponent<Amy>())
             {
-                if (Player.GetComponent<Amy>().vivo)
+                if (Player.GetComponent<Amy>().vivo == 1)
                 {
                     if (estadoAtaque == 0)
                     {
@@ -99,7 +99,7 @@ public class Cyclope : MonoBehaviour
             }
             else
             {
-                if (Player.GetComponent<Zed>().vivo)
+                if (Player.GetComponent<Zed>().vivo == 1)
                 {
                     if (estadoAtaque == 0)
                     {
@@ -133,7 +133,6 @@ public class Cyclope : MonoBehaviour
                 hp -= danoALevar;
                 ControlAnim.SetTrigger("Damage");
                 TomeiDano();
-                Destroy(colidiu.gameObject);
             }
         }
     }
@@ -177,20 +176,31 @@ public class Cyclope : MonoBehaviour
     {
         if (hp <= 0)
         {
-            if (Player.GetComponent<Amy>())
-            {
-                Player.GetComponent<Amy>().AlteracaoEXP((expDada / 4) * 3);
-                Player.GetComponent<Zed>().AlteracaoEXP(expDada / 4);
-            }
-            else
-            {
-                Player.GetComponent<Amy>().AlteracaoEXP(expDada / 4);
-                Player.GetComponent<Zed>().AlteracaoEXP((expDada / 4) * 3);
-            }
             GameObject.FindGameObjectWithTag("GameController").GetComponent<GerenciadorFase>().InimigoMorreu();
             ControlAnim.SetTrigger("Death");
             Destroy(this.gameObject, 1f);
         }
+    }
+
+    public void DarEXP()
+    {
+        float paraZed;
+        float paraAmy;
+
+        if (Player.GetComponent<Amy>())
+        {
+            paraZed = PlayerPrefs.GetFloat("ZED_EXP") + (expDada / 4);
+            paraAmy = PlayerPrefs.GetFloat("AMY_EXP") + ((expDada / 4) * 3);
+            Player.GetComponent<Amy>().AlteracaoEXP(paraAmy);
+        }
+        else
+        {
+            paraAmy = PlayerPrefs.GetFloat("AMY_EXP") + (expDada / 4);
+            paraZed = PlayerPrefs.GetFloat("ZED_EXP") + ((expDada / 4) * 3);
+            Player.GetComponent<Zed>().AlteracaoEXP(paraZed);
+        }
+        PlayerPrefs.SetFloat("ZED_EXP", paraZed);
+        PlayerPrefs.SetFloat("AMY_EXP", paraAmy);
     }
 
     public void AtivarAtk()

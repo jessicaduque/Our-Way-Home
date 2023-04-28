@@ -11,15 +11,20 @@ public class FaseInicial : MonoBehaviour
         PlayerPrefs.SetInt("PERSONAGEM_ATIVO", 1);
 
         // Setar os stats iniciais dos personagens
+
+        // Amy
         PlayerPrefs.SetInt("AMY_NIVEL", 1);
         PlayerPrefs.SetFloat("AMY_EXP", 0);
         PlayerPrefs.SetFloat("AMY_VIDA", 10);
         PlayerPrefs.SetFloat("AMY_MANA", 10);
+        PlayerPrefs.SetInt("AMY_VIVO", 1);
 
+        // Zed
         PlayerPrefs.SetInt("ZED_NIVEL", 1);
         PlayerPrefs.SetFloat("ZED_EXP", 0);
         PlayerPrefs.SetFloat("ZED_VIDA", 10);
         PlayerPrefs.SetFloat("ZED_STAMINA", 10);
+        PlayerPrefs.SetInt("ZED_VIVO", 1);
     }
 
     // Update is called once per frame

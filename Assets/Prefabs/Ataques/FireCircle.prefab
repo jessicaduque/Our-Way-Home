@@ -48378,7 +48378,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nome: CirculoFogo
-  dano: 2
+  dano: 3
   DPS: 1
 --- !u!54 &-1410201082669519360
 Rigidbody:

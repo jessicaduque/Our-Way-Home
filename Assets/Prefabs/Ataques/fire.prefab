@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nome: Fogo
-  dano: 2.5
+  dano: 1.2
   DPS: 0
 --- !u!54 &-5565693712722835643
 Rigidbody:

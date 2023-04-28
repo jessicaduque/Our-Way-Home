@@ -17,9 +17,17 @@ public class Ataque : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(nome == "CirculoFogo" || nome == "Slash")
+        if(nome == "CirculoFogo" || nome == "Slash" || nome == "Pedra")
         {
             Destroy(this.gameObject, 3f);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (nome == "AtkAgua" && collision.gameObject.tag == "Enemy")
+        {
+            Destroy(this.gameObject);
         }
     }
 }

@@ -8,6 +8,7 @@ public class Amy : MonoBehaviour
     // Posição 
     GerenciadorFase GerenciadorFase;
     Vector3 frente;
+    int clicou;
 
     // NavMesh
     public Vector3 Destino;
@@ -20,7 +21,7 @@ public class Amy : MonoBehaviour
     public float expParaProxNivel = 10;
     public int nivel;
     int nivelMax = 5;
-    public bool vivo = true;
+    public int vivo = 1;
     bool invulneravel = false;
     bool metadeValorAtaque = false;
 
@@ -61,9 +62,20 @@ public class Amy : MonoBehaviour
         // Animador
         ControlAnim = GetComponent<Animator>();
     }
+    private void OnEnable()
+    {
+        levandoDano = false;
+        LoadStats();
+    }
 
     void Update()
     {
+        if (clicou == 0)
+        {
+            frente = transform.position + GerenciadorFase.frenteInicial;
+            transform.LookAt(frente);
+        }
+
         //// Mover
         NavMeshMover();
         ControleAnimacaoMover();
@@ -106,8 +118,9 @@ public class Amy : MonoBehaviour
     }
     void NavMeshMover()
     {
-        if (Input.GetMouseButtonDown(0) && vivo)
+        if (Input.GetMouseButtonDown(0) && vivo == 1)
         {
+            clicou = 1;
             if(estaAtacando || levandoDano)
             {
                 Destino = transform.position;
@@ -121,7 +134,14 @@ public class Amy : MonoBehaviour
                 {
                     if (localTocou.collider.gameObject.tag == "Enemy")
                     {
-                        Agente.stoppingDistance = 0.1f;
+                        if (localTocou.collider.gameObject.GetComponent<Boss>())
+                        {
+                            Agente.stoppingDistance = 0.4f;
+                        }
+                        else
+                        {
+                            Agente.stoppingDistance = 0.1f;
+                        }
                         Destino = localTocou.transform.position;
                     }
                     else if (localTocou.collider.gameObject.tag == "Obstacule")
@@ -311,6 +331,7 @@ public class Amy : MonoBehaviour
         nivel = PlayerPrefs.GetInt("AMY_NIVEL");
         exp = PlayerPrefs.GetFloat("AMY_EXP");
         hp = PlayerPrefs.GetFloat("AMY_VIDA");
+        vivo = PlayerPrefs.GetInt("AMY_VIVO");
         //mana = PlayerPrefs.GetFloat("AMY_MANA");
     }
 
@@ -319,7 +340,8 @@ public class Amy : MonoBehaviour
         PlayerPrefs.SetInt("AMY_NIVEL", nivel);
         PlayerPrefs.SetFloat("AMY_EXP", exp);
         PlayerPrefs.SetFloat("AMY_VIDA", hp);
-        //PlayerPrefs.SetFloat("AMY_MANA", mana);
+        PlayerPrefs.SetInt("AMY_VIVO", vivo);
+        PlayerPrefs.SetFloat("AMY_MANA", mana);
     }
 
     public void EstaAtacando(int atacando)
@@ -376,7 +398,7 @@ public class Amy : MonoBehaviour
     {
         if (colidiu.gameObject.tag == "EnemyAttack")
         {
-            if (vivo == true && !invulneravel)
+            if (vivo == 1 && !invulneravel)
             {
                 float danoALevar = colidiu.gameObject.GetComponent<Ataque>().dano;
                 AlteracaoVida(-danoALevar);
@@ -396,8 +418,20 @@ public class Amy : MonoBehaviour
 
     public void Morrer()
     {
-        vivo = false;
+        vivo = 0;
         ControlAnim.SetBool("Dead", true);
+    }
+
+    public void MudarPlayerMorte()
+    {
+        if(PlayerPrefs.GetInt("ZED_VIVO") == 1)
+        {
+            GerenciadorFase.ZedAtivo();
+        }
+        else
+        {
+            GameObject.FindGameObjectWithTag("Canvas").GetComponent<CanvasController>().TelaMorte();
+        }
     }
 
     public void MetadeAtk(bool metade)

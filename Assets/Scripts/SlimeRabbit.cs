@@ -11,12 +11,15 @@ public class SlimeRabbit : MonoBehaviour
     // Stats
     public float hp = 5;
     float expDada = 4;
+    bool vivo = true;
 
     // Ataques
     public GameObject MeuAtaque;
     public GameObject EfeitoAtaquePrefab;
     public GameObject PontoDeSaida;
     float tempoDPS = 0.0f;
+    bool atacando;
+    float tempoAtacando = 0.0f;
 
     // NavMesh
     private Vector3 Destino;
@@ -39,6 +42,7 @@ public class SlimeRabbit : MonoBehaviour
 
         // Ataques
         ControleAnimacaoAtaque();
+        CoolDownAtaque();
     }
 
     void NavMeshMover()
@@ -59,9 +63,12 @@ public class SlimeRabbit : MonoBehaviour
         {
             if (Player.GetComponent<Amy>())
             {
-                if (Player.GetComponent<Amy>().vivo)
+                if (Player.GetComponent<Amy>().vivo == 1)
                 {
-                    ControlAnim.SetBool("Attacking", true);
+                    if (!atacando)
+                    {
+                        ControlAnim.SetBool("Attacking", true);
+                    }
                 }
                 else
                 {
@@ -70,9 +77,12 @@ public class SlimeRabbit : MonoBehaviour
             }
             else
             {
-                if (Player.GetComponent<Zed>().vivo)
+                if (Player.GetComponent<Zed>().vivo == 1)
                 {
-                    ControlAnim.SetBool("Attacking", true);
+                    if (!atacando)
+                    {
+                        ControlAnim.SetBool("Attacking", true);
+                    }
                 }
                 else
                 {
@@ -90,10 +100,8 @@ public class SlimeRabbit : MonoBehaviour
             if (!colidiu.gameObject.GetComponent<Ataque>().DPS)
             {
                 float danoALevar = colidiu.gameObject.GetComponent<Ataque>().dano;
-                hp -= danoALevar;
-                ControlAnim.SetTrigger("Damage");
-                TomeiDano();
-                Destroy(colidiu.gameObject);
+                TomeiDano(danoALevar);
+                
             }
         }
     }
@@ -108,9 +116,7 @@ public class SlimeRabbit : MonoBehaviour
                 
                 if (tempoDPS == 0)
                 {
-                    hp -= danoALevar;
-                    ControlAnim.SetTrigger("Damage");
-                    TomeiDano();
+                    TomeiDano(danoALevar);
                     tempoDPS += Time.deltaTime;
                 }
                 else
@@ -119,9 +125,7 @@ public class SlimeRabbit : MonoBehaviour
 
                     if(tempoDPS > 1 && tempoDPS < 2)
                     {
-                        hp -= danoALevar;
-                        ControlAnim.SetTrigger("Damage");
-                        TomeiDano();
+                        TomeiDano(danoALevar);
                         tempoDPS = 2f;
                     }
                     else if (tempoDPS > 3)
@@ -133,24 +137,41 @@ public class SlimeRabbit : MonoBehaviour
         }
     }
 
-    public void TomeiDano()
+    public void TomeiDano(float danoALevar)
     {
+        if (vivo)
+        {
+            hp -= danoALevar;
+            ControlAnim.SetTrigger("Damage");
+            
+        }
         if (hp <= 0)
         {
-            if (Player.GetComponent<Amy>())
-            {
-                Player.GetComponent<Amy>().AlteracaoEXP((expDada / 4) * 3);
-                Player.GetComponent<Zed>().AlteracaoEXP(expDada / 4);
-            }
-            else
-            {
-                Player.GetComponent<Amy>().AlteracaoEXP(expDada / 4);
-                Player.GetComponent<Zed>().AlteracaoEXP((expDada / 4) * 3);
-            }
+            vivo = false;
             GameObject.FindGameObjectWithTag("GameController").GetComponent<GerenciadorFase>().InimigoMorreu();
-            ControlAnim.SetTrigger("Death");
-            Destroy(this.gameObject, 1f);
+            ControlAnim.SetBool("Death", true);
+            
         }
+    }
+    public void DarEXP()
+    {
+        float paraZed;
+        float paraAmy;
+
+        if (Player.GetComponent<Amy>())
+        {
+            paraZed = PlayerPrefs.GetFloat("ZED_EXP") + (expDada / 4);
+            paraAmy = PlayerPrefs.GetFloat("AMY_EXP") + ((expDada / 4) * 3);
+            Player.GetComponent<Amy>().AlteracaoEXP(paraAmy);
+        }
+        else
+        {
+            paraAmy = PlayerPrefs.GetFloat("AMY_EXP") + (expDada / 4);
+            paraZed = PlayerPrefs.GetFloat("ZED_EXP") + ((expDada / 4) * 3);
+            Player.GetComponent<Zed>().AlteracaoEXP(paraZed);
+        }
+        PlayerPrefs.SetFloat("ZED_EXP", paraZed);
+        PlayerPrefs.SetFloat("AMY_EXP", paraAmy);
     }
 
     public void EfeitoAtaque()
@@ -163,6 +184,29 @@ public class SlimeRabbit : MonoBehaviour
 
     public void Ataque()
     {
+        atacando = true;
         Instantiate(MeuAtaque, Player.transform.position + new Vector3(0, 0.3f, 0), Quaternion.identity);
+    }
+
+    void CoolDownAtaque()
+    {
+        if (atacando)
+        {
+            tempoAtacando += Time.deltaTime;
+            if(tempoAtacando > 0.6f)
+            {
+                ControlAnim.SetBool("Attacking", false);
+            }
+            if (tempoAtacando > 5)
+            {
+                atacando = false;
+                tempoAtacando = 0.0f;
+            }
+        }
+    }
+
+    public void Morrer()
+    {
+        Destroy(this.gameObject);
     }
 }

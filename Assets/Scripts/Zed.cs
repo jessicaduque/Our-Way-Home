@@ -8,6 +8,7 @@ public class Zed : MonoBehaviour
     // Posição 
     GerenciadorFase GerenciadorFase;
     Vector3 frente;
+    int clicou = 0;
 
     // NavMesh
     public Vector3 Destino;
@@ -20,7 +21,7 @@ public class Zed : MonoBehaviour
     public float expParaProxNivel = 10;
     public int nivel;
     int nivelMax = 5;
-    public bool vivo = true;
+    public int vivo = 1;
     bool invulneravel = false;
     bool metadeValorAtaque = false;
 
@@ -63,11 +64,18 @@ public class Zed : MonoBehaviour
 
     private void OnEnable()
     {
+        levandoDano = false;
         LoadStats();
     }
 
     void Update()
     {
+        if (clicou == 0)
+        {
+            frente = transform.position + GerenciadorFase.frenteInicial;
+            transform.LookAt(frente);
+        }
+
         //// Mover
         NavMeshMover();
         ControleAnimacaoMover();
@@ -76,14 +84,14 @@ public class Zed : MonoBehaviour
         // Controle de input e níveis permitidos para ataques
         ControleAtaques();
 
+        // Atualizar UI
+        GameObject.FindGameObjectWithTag("Canvas").GetComponent<CanvasController>().UIZedDados();
+
         //// Controle Status
         // Salvar stats constantemente
         SalvarStats();
         // Exp
         ControleNivel();
-
-        // Atualizar UI
-        GameObject.FindGameObjectWithTag("Canvas").GetComponent<CanvasController>().UIZedDados();
 
     }
     void ControleAnimacaoMover()
@@ -110,8 +118,9 @@ public class Zed : MonoBehaviour
     }
     void NavMeshMover()
     {
-        if (Input.GetMouseButtonDown(0) && vivo)
+        if (Input.GetMouseButtonDown(0) && vivo == 1)
         {
+            clicou = 1;
             if (estaAtacando || levandoDano)
             {
                 Destino = transform.position;
@@ -125,7 +134,14 @@ public class Zed : MonoBehaviour
                 {
                     if (localTocou.collider.gameObject.tag == "Enemy")
                     {
-                        Agente.stoppingDistance = 0.1f;
+                        if (localTocou.collider.gameObject.GetComponent<Boss>())
+                        {
+                            Agente.stoppingDistance = 0.4f;
+                        }
+                        else
+                        {
+                            Agente.stoppingDistance = 0.1f;
+                        }
                         Destino = localTocou.transform.position;
                     }
                     else if (localTocou.collider.gameObject.tag == "Obstacule")
@@ -286,6 +302,7 @@ public class Zed : MonoBehaviour
         exp = PlayerPrefs.GetFloat("ZED_EXP");
         hp = PlayerPrefs.GetFloat("ZED_VIDA");
         stamina = PlayerPrefs.GetFloat("ZED_STAMINA");
+        vivo = PlayerPrefs.GetInt("ZED_VIVO");
     }
 
     public void SalvarStats()
@@ -294,6 +311,7 @@ public class Zed : MonoBehaviour
         PlayerPrefs.SetFloat("ZED_EXP", exp);
         PlayerPrefs.SetFloat("ZED_VIDA", hp);
         PlayerPrefs.SetFloat("ZED_STAMINA", stamina);
+        PlayerPrefs.SetInt("ZED_VIVO", vivo);
     }
 
     public void EstaAtacando(int atacando)
@@ -344,7 +362,7 @@ public class Zed : MonoBehaviour
     public void Atk3()
     {
         AlteracaoStamina(-4);
-        for(int i = 0; i < PontoSaidaAtk3Lista.Length; i++)
+        for (int i = 0; i < PontoSaidaAtk3Lista.Length; i++)
         {
             GameObject Slash = Instantiate(prefabSlash, PontoSaidaAtk3Lista[i].transform.position, Quaternion.identity);
             Slash.transform.rotation = Quaternion.AngleAxis(90, Vector3.down) * PontoSaidaAtk3Lista[i].transform.rotation;
@@ -353,30 +371,12 @@ public class Zed : MonoBehaviour
         //***Som do disparo de água
         //DisparoAguaAudio.Play(0);
     }
-    /**
-    public void AtkFogo()
-    {
-        AlteracaoStamina(-4);
-        if (GameObject.FindGameObjectWithTag("Enemy"))
-        {
-            GameObject Enemy = GameObject.FindGameObjectWithTag("Enemy");
-            Instantiate(FogoPrefab, Enemy.transform.position, Quaternion.identity);
-        }
-        else
-        {
-            Instantiate(FogoPrefab, PontoDeSaidaFogo.transform.position, Quaternion.identity);
-        }
-
-        //***Som do fogo
-        //DisparoAguaAudio.Play(0);
-    }
-    **/
 
     private void OnTriggerEnter(Collider colidiu)
     {
         if (colidiu.gameObject.tag == "EnemyAttack")
         {
-            if (vivo == true && !invulneravel)
+            if (vivo == 1 && !invulneravel)
             {
                 float danoALevar = colidiu.gameObject.GetComponent<Ataque>().dano;
                 AlteracaoVida(-danoALevar);
@@ -395,9 +395,21 @@ public class Zed : MonoBehaviour
     }
 
 
+    public void MudarPlayerMorte()
+    {
+        if (PlayerPrefs.GetInt("ZED_VIVO") == 1)
+        {
+            GerenciadorFase.ZedAtivo();
+        }
+        else
+        {
+            GameObject.FindGameObjectWithTag("Canvas").GetComponent<CanvasController>().TelaMorte();
+        }
+    }
+
     public void Morrer()
     {
-        vivo = false;
+        vivo = 0;
         ControlAnim.SetBool("Dead", true);
     }
 

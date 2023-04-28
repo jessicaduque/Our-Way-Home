@@ -14,9 +14,12 @@ public class GerenciadorFase : MonoBehaviour
     int intPersonagemAtivo;
     public int quantInimigosFase;
     public bool faseCompleta = false;
+    public int faseAtual;
 
     private void Start()
     {
+        Time.timeScale = 1;
+
         quantInimigosFase = GameObject.FindGameObjectsWithTag("Enemy").Length;
 
         if (PlayerPrefs.GetInt("PERSONAGEM_ATIVO") == 0)
@@ -55,18 +58,18 @@ public class GerenciadorFase : MonoBehaviour
     {
         if (Input.GetKeyDown("space"))
         {
-            if (PersonagemAtivo == Amy)
+            if (PersonagemAtivo == Amy && PlayerPrefs.GetInt("ZED_VIVO") == 1)
             {
                 ZedAtivo();
             }
-            else
+            else if(PersonagemAtivo == Zed && PlayerPrefs.GetInt("AMY_VIVO") == 1)
             {
                 AmyAtivo();
             }
         }
     }
 
-    void ZedAtivo()
+    public void ZedAtivo()
     {
         intPersonagemAtivo = 0;
         Zed.transform.position = Amy.transform.position;
@@ -78,7 +81,7 @@ public class GerenciadorFase : MonoBehaviour
         Zed.SetActive(true);
     }
 
-    void AmyAtivo()
+    public void AmyAtivo()
     {
         intPersonagemAtivo = 1;
         Amy.transform.position = Zed.transform.position;
