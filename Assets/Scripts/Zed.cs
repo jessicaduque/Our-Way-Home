@@ -41,6 +41,7 @@ public class Zed : MonoBehaviour
     {
         // Stats
         LoadStats();
+        Debug.Log(PlayerPrefs.GetInt("ZED_VIVO"));
         stamina = 10;
 
         // Inicio Posição
@@ -64,7 +65,6 @@ public class Zed : MonoBehaviour
 
     private void OnEnable()
     {
-        levandoDano = false;
         LoadStats();
     }
 
@@ -109,7 +109,7 @@ public class Zed : MonoBehaviour
         if (GameObject.FindGameObjectWithTag("Enemy"))
         {
             GameObject Enemy = GameObject.FindGameObjectWithTag("Enemy");
-            if (Vector3.Distance(Enemy.transform.position, transform.position) < 1.3f)
+            if (Vector3.Distance(Enemy.transform.position, transform.position) < 1.5f)
             {
                 transform.LookAt(Enemy.transform.position);
             }
@@ -303,15 +303,19 @@ public class Zed : MonoBehaviour
         hp = PlayerPrefs.GetFloat("ZED_VIDA");
         stamina = PlayerPrefs.GetFloat("ZED_STAMINA");
         vivo = PlayerPrefs.GetInt("ZED_VIVO");
+
+        levandoDano = false;
+        estaAtacando = false;
     }
 
     public void SalvarStats()
     {
         PlayerPrefs.SetInt("ZED_NIVEL", nivel);
-        PlayerPrefs.SetFloat("ZED_EXP", exp);
-        PlayerPrefs.SetFloat("ZED_VIDA", hp);
+        if(hp != 0)
+        {
+            PlayerPrefs.SetFloat("ZED_VIDA", hp);
+        }
         PlayerPrefs.SetFloat("ZED_STAMINA", stamina);
-        PlayerPrefs.SetInt("ZED_VIVO", vivo);
     }
 
     public void EstaAtacando(int atacando)
@@ -397,7 +401,7 @@ public class Zed : MonoBehaviour
 
     public void MudarPlayerMorte()
     {
-        if (PlayerPrefs.GetInt("ZED_VIVO") == 1)
+        if (PlayerPrefs.GetInt("AMY_VIVO") == 1)
         {
             GerenciadorFase.ZedAtivo();
         }
@@ -410,6 +414,7 @@ public class Zed : MonoBehaviour
     public void Morrer()
     {
         vivo = 0;
+        PlayerPrefs.SetInt("ZED_VIVO", vivo);
         ControlAnim.SetBool("Dead", true);
     }
 

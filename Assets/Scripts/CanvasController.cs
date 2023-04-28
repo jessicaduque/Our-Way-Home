@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using UnityEngine.SceneManagement;
 
 public class CanvasController : MonoBehaviour
@@ -15,7 +14,7 @@ public class CanvasController : MonoBehaviour
     // Amy
     public GameObject Amy_Panel;
     public Image Amy_EXP;
-    public TMP_Text Amy_Nivel;
+    public Text Amy_Nivel;
     public Image Amy_Trocar;
     public Image Amy_AtkAgua;
     public Image Amy_MagiaEscudo;
@@ -26,7 +25,7 @@ public class CanvasController : MonoBehaviour
     // Zed
     public GameObject Zed_Panel;
     public Image Zed_EXP;
-    public TMP_Text Zed_Nivel;
+    public Text Zed_Nivel;
     public Image Zed_Trocar;
     public Image Zed_Atk2;
     public Image Zed_Atk3;
@@ -54,7 +53,14 @@ public class CanvasController : MonoBehaviour
 
         Zed_Nivel.text = nivel.ToString();
         Zed_Stamina.fillAmount = stamina;
-        Zed_Vida.fillAmount = vida;
+        if(PlayerPrefs.GetInt("ZED_VIVO") == 0)
+        {
+            Zed_Vida.fillAmount = 0;
+        }
+        else
+        {
+            Zed_Vida.fillAmount = vida;
+        }
         Zed_EXP.fillAmount = exp;
 
         UIZedAtivado(nivel);
@@ -69,7 +75,7 @@ public class CanvasController : MonoBehaviour
         {
             Zed_Atk2.gameObject.SetActive(true);
         }
-        else if (nivel >= 5)
+        if (nivel >= 5)
         {
             Zed_Atk3.gameObject.SetActive(true);
         }
@@ -84,7 +90,14 @@ public class CanvasController : MonoBehaviour
 
         Amy_Nivel.text = nivel.ToString();
         Amy_Mana.fillAmount = mana;
-        Amy_Vida.fillAmount = vida;
+        if (PlayerPrefs.GetInt("AMY_VIVO") == 0)
+        {
+            Amy_Vida.fillAmount = 0;
+        }
+        else
+        {
+            Amy_Vida.fillAmount = vida;
+        }
         Amy_EXP.fillAmount = exp;
 
         UIAmyAtivado(nivel);
@@ -98,11 +111,11 @@ public class CanvasController : MonoBehaviour
         {
             Amy_AtkAgua.gameObject.SetActive(true);
         }
-        else if (nivel >= 4)
+        if (nivel >= 4)
         {
             Amy_MagiaEscudo.gameObject.SetActive(true);
         }
-        else if (nivel >= 5)
+        if (nivel >= 5)
         {
             Amy_AtkFogo.gameObject.SetActive(true);
         }

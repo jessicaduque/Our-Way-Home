@@ -5419,7 +5419,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 183298850365369994, guid: 196d94d1a9620054d9ed6fe1f21e0cd1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.24574214
+      value: 2.11
       objectReference: {fileID: 0}
     - target: {fileID: 183298850365369994, guid: 196d94d1a9620054d9ed6fe1f21e0cd1, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5427,7 +5427,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 183298850365369994, guid: 196d94d1a9620054d9ed6fe1f21e0cd1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.0054345
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 183298850365369994, guid: 196d94d1a9620054d9ed6fe1f21e0cd1, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7697,7 +7697,7 @@ MonoBehaviour:
   PersonagemAtivo: {fileID: 0}
   quantInimigosFase: 5
   faseCompleta: 0
-  faseAtual: 0
+  faseAtual: 5
 --- !u!4 &1615333999
 Transform:
   m_ObjectHideFlags: 0

@@ -27,7 +27,7 @@ public class randomParticleRotation : MonoBehaviour {
             if (InimigoCriador.GetComponent<SlimeRabbit>().ControlAnim.GetBool("Attacking"))
             {
 				transform.position = InimigoCriador.transform.position;
-				Destroy(this.gameObject, 3f);
+				Destroy(this.gameObject, 4f);
 			}
             else
             {

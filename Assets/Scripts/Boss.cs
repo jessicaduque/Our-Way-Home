@@ -130,9 +130,11 @@ public class Boss : MonoBehaviour
             if (!colidiu.gameObject.GetComponent<Ataque>().DPS)
             {
                 float danoALevar = colidiu.gameObject.GetComponent<Ataque>().dano;
-                hp -= danoALevar;
-                ControlAnim.SetTrigger("Damage");
-                TomeiDano();
+                TomeiDano(danoALevar);
+                if (colidiu.gameObject.GetComponent<Ataque>().nome == "AtkAgua")
+                {
+                    Destroy(colidiu.gameObject);
+                }
             }
         }
     }
@@ -147,9 +149,7 @@ public class Boss : MonoBehaviour
 
                 if (tempoDPS == 0)
                 {
-                    hp -= danoALevar;
-                    ControlAnim.SetTrigger("Damage");
-                    TomeiDano();
+                    TomeiDano(danoALevar);
                     tempoDPS += Time.deltaTime;
                 }
                 else
@@ -158,9 +158,7 @@ public class Boss : MonoBehaviour
 
                     if (tempoDPS > 1 && tempoDPS < 2)
                     {
-                        hp -= danoALevar;
-                        ControlAnim.SetTrigger("Damage");
-                        TomeiDano();
+                        TomeiDano(danoALevar);
                         tempoDPS = 2f;
                     }
                     else if (tempoDPS > 3)
@@ -172,14 +170,20 @@ public class Boss : MonoBehaviour
         }
     }
 
-    public void TomeiDano()
+    public void TomeiDano(float danoALevar)
     {
+        if (vivo)
+        {
+            hp -= danoALevar;
+            ControlAnim.SetTrigger("Damage");
+
+        }
         if (hp <= 0)
         {
             vivo = false;
             GameObject.FindGameObjectWithTag("GameController").GetComponent<GerenciadorFase>().InimigoMorreu();
             ControlAnim.SetBool("Death", true);
-            Destroy(this.gameObject, 1f);
+
         }
     }
 
@@ -190,16 +194,17 @@ public class Boss : MonoBehaviour
 
         if (Player.GetComponent<Amy>())
         {
-            paraZed = PlayerPrefs.GetFloat("ZED_EXP") + (expDada / 4);
-            paraAmy = PlayerPrefs.GetFloat("AMY_EXP") + ((expDada / 4) * 3);
+            paraZed = PlayerPrefs.GetFloat("ZED_EXP") + ((expDada / 8) * 3);
+            paraAmy = PlayerPrefs.GetFloat("AMY_EXP") + ((expDada / 8) * 5);
             Player.GetComponent<Amy>().AlteracaoEXP(paraAmy);
         }
         else
         {
-            paraAmy = PlayerPrefs.GetFloat("AMY_EXP") + (expDada / 4);
-            paraZed = PlayerPrefs.GetFloat("ZED_EXP") + ((expDada / 4) * 3);
+            paraAmy = PlayerPrefs.GetFloat("AMY_EXP") + ((expDada / 8) * 3);
+            paraZed = PlayerPrefs.GetFloat("ZED_EXP") + ((expDada / 8) * 5);
             Player.GetComponent<Zed>().AlteracaoEXP(paraZed);
         }
+
         PlayerPrefs.SetFloat("ZED_EXP", paraZed);
         PlayerPrefs.SetFloat("AMY_EXP", paraAmy);
     }

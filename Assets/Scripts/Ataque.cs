@@ -23,11 +23,4 @@ public class Ataque : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (nome == "AtkAgua" && collision.gameObject.tag == "Enemy")
-        {
-            Destroy(this.gameObject);
-        }
-    }
 }

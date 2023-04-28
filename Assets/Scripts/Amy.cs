@@ -64,7 +64,6 @@ public class Amy : MonoBehaviour
     }
     private void OnEnable()
     {
-        levandoDano = false;
         LoadStats();
     }
 
@@ -84,14 +83,14 @@ public class Amy : MonoBehaviour
         // Controle de input e níveis permitidos para ataques
         ControleAtaques();
 
+        // Atualizar UI
+        GameObject.FindGameObjectWithTag("Canvas").GetComponent<CanvasController>().UIAmyDados();
+
         //// Controle Status
         // Salvar stats constantemente
         SalvarStats();
         // Exp
         ControleNivel();
-
-        // Atualizar UI
-        GameObject.FindGameObjectWithTag("Canvas").GetComponent<CanvasController>().UIAmyDados();
     }
 
     void ControleAnimacaoMover()
@@ -109,7 +108,7 @@ public class Amy : MonoBehaviour
         if (GameObject.FindGameObjectWithTag("Enemy")) 
         {
             GameObject Enemy = GameObject.FindGameObjectWithTag("Enemy");
-            if (Vector3.Distance(Enemy.transform.position, transform.position) < 1.3f)
+            if (Vector3.Distance(Enemy.transform.position, transform.position) < 1.5f)
             {
                 transform.LookAt(Enemy.transform.position);
             }
@@ -333,14 +332,19 @@ public class Amy : MonoBehaviour
         hp = PlayerPrefs.GetFloat("AMY_VIDA");
         vivo = PlayerPrefs.GetInt("AMY_VIVO");
         //mana = PlayerPrefs.GetFloat("AMY_MANA");
+
+        levandoDano = false;
+        estaAtacando = false;
     }
 
     public void SalvarStats()
     {
         PlayerPrefs.SetInt("AMY_NIVEL", nivel);
-        PlayerPrefs.SetFloat("AMY_EXP", exp);
-        PlayerPrefs.SetFloat("AMY_VIDA", hp);
         PlayerPrefs.SetInt("AMY_VIVO", vivo);
+        if (hp != 0)
+        {
+            PlayerPrefs.SetFloat("AMY_VIDA", hp);
+        }
         PlayerPrefs.SetFloat("AMY_MANA", mana);
     }
 
@@ -419,6 +423,7 @@ public class Amy : MonoBehaviour
     public void Morrer()
     {
         vivo = 0;
+        PlayerPrefs.SetInt("AMY_VIVO", vivo);
         ControlAnim.SetBool("Dead", true);
     }
 

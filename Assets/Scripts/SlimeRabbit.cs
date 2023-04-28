@@ -37,6 +37,9 @@ public class SlimeRabbit : MonoBehaviour
 
     private void Update()
     {
+        Player = GameObject.FindGameObjectWithTag("Player");
+        transform.LookAt(Player.transform.position);
+
         // Movimentação
         NavMeshMover();
 
@@ -47,7 +50,6 @@ public class SlimeRabbit : MonoBehaviour
 
     void NavMeshMover()
     {
-        Player = GameObject.FindGameObjectWithTag("Player");
         Destino = Player.transform.position;
         Agente.stoppingDistance = 0.8f;
         Agente.SetDestination(Destino);
@@ -101,7 +103,11 @@ public class SlimeRabbit : MonoBehaviour
             {
                 float danoALevar = colidiu.gameObject.GetComponent<Ataque>().dano;
                 TomeiDano(danoALevar);
-                
+                if (colidiu.gameObject.GetComponent<Ataque>().nome == "AtkAgua")
+                {
+                    Destroy(colidiu.gameObject);
+                }
+
             }
         }
     }
@@ -160,16 +166,17 @@ public class SlimeRabbit : MonoBehaviour
 
         if (Player.GetComponent<Amy>())
         {
-            paraZed = PlayerPrefs.GetFloat("ZED_EXP") + (expDada / 4);
-            paraAmy = PlayerPrefs.GetFloat("AMY_EXP") + ((expDada / 4) * 3);
+            paraZed = PlayerPrefs.GetFloat("ZED_EXP") + ((expDada / 8) * 3);
+            paraAmy = PlayerPrefs.GetFloat("AMY_EXP") + ((expDada / 8) * 5);
             Player.GetComponent<Amy>().AlteracaoEXP(paraAmy);
         }
         else
         {
-            paraAmy = PlayerPrefs.GetFloat("AMY_EXP") + (expDada / 4);
-            paraZed = PlayerPrefs.GetFloat("ZED_EXP") + ((expDada / 4) * 3);
+            paraAmy = PlayerPrefs.GetFloat("AMY_EXP") + ((expDada / 8) * 3);
+            paraZed = PlayerPrefs.GetFloat("ZED_EXP") + ((expDada / 8) * 5);
             Player.GetComponent<Zed>().AlteracaoEXP(paraZed);
         }
+
         PlayerPrefs.SetFloat("ZED_EXP", paraZed);
         PlayerPrefs.SetFloat("AMY_EXP", paraAmy);
     }
