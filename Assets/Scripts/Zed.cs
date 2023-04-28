@@ -41,7 +41,6 @@ public class Zed : MonoBehaviour
     {
         // Stats
         LoadStats();
-        Debug.Log(PlayerPrefs.GetInt("ZED_VIVO"));
         stamina = 10;
 
         // Inicio Posição
@@ -283,6 +282,8 @@ public class Zed : MonoBehaviour
             hp = 10;
         }
 
+        PlayerPrefs.SetFloat("ZED_VIDA", hp);
+
         if (hp <= 0)
         {
             Morrer();
@@ -311,10 +312,6 @@ public class Zed : MonoBehaviour
     public void SalvarStats()
     {
         PlayerPrefs.SetInt("ZED_NIVEL", nivel);
-        if(hp != 0)
-        {
-            PlayerPrefs.SetFloat("ZED_VIDA", hp);
-        }
         PlayerPrefs.SetFloat("ZED_STAMINA", stamina);
     }
 

@@ -53,14 +53,7 @@ public class CanvasController : MonoBehaviour
 
         Zed_Nivel.text = nivel.ToString();
         Zed_Stamina.fillAmount = stamina;
-        if(PlayerPrefs.GetInt("ZED_VIVO") == 0)
-        {
-            Zed_Vida.fillAmount = 0;
-        }
-        else
-        {
-            Zed_Vida.fillAmount = vida;
-        }
+        Zed_Vida.fillAmount = vida;
         Zed_EXP.fillAmount = exp;
 
         UIZedAtivado(nivel);
@@ -90,14 +83,7 @@ public class CanvasController : MonoBehaviour
 
         Amy_Nivel.text = nivel.ToString();
         Amy_Mana.fillAmount = mana;
-        if (PlayerPrefs.GetInt("AMY_VIVO") == 0)
-        {
-            Amy_Vida.fillAmount = 0;
-        }
-        else
-        {
-            Amy_Vida.fillAmount = vida;
-        }
+        Amy_Vida.fillAmount = vida;
         Amy_EXP.fillAmount = exp;
 
         UIAmyAtivado(nivel);

@@ -19,8 +19,7 @@ public class GerenciadorFase : MonoBehaviour
     private void Start()
     {
         Time.timeScale = 1;
-
-        quantInimigosFase = GameObject.FindGameObjectsWithTag("Enemy").Length;
+        ControleStatusFase();
 
         if (PlayerPrefs.GetInt("PERSONAGEM_ATIVO") == 0)
         {
@@ -37,8 +36,153 @@ public class GerenciadorFase : MonoBehaviour
         // Controle personagem ativo
         ControlePersonagemAtivo();
 
+        quantInimigosFase = GameObject.FindGameObjectsWithTag("Enemy").Length;
+
         // InimigosVivos
         ControleAvancarFase();
+    }
+
+    void ControleStatusFase()
+    {
+        if (faseAtual == 1)
+        {
+            if (PlayerPrefs.GetInt("FASE1") == 1)
+            {
+                GameObject[] Inimigos;
+                Inimigos = GameObject.FindGameObjectsWithTag("Enemy");
+
+                foreach (GameObject inimigo in Inimigos)
+                {
+                    inimigo.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        if (faseAtual == 2)
+        {
+            if (PlayerPrefs.GetInt("FASE2") == 1)
+            {
+                GameObject[] Inimigos;
+                Inimigos = GameObject.FindGameObjectsWithTag("Enemy");
+
+                foreach (GameObject inimigo in Inimigos)
+                {
+                    inimigo.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        if (faseAtual == 3)
+        {
+            if (PlayerPrefs.GetInt("FASE3") == 1)
+            {
+                GameObject[] Inimigos;
+                Inimigos = GameObject.FindGameObjectsWithTag("Enemy");
+
+                foreach (GameObject inimigo in Inimigos)
+                {
+                    inimigo.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        if (faseAtual == 4)
+        {
+            if (PlayerPrefs.GetInt("FASE4") == 1)
+            {
+                GameObject[] Inimigos;
+                Inimigos = GameObject.FindGameObjectsWithTag("Enemy");
+
+                foreach (GameObject inimigo in Inimigos)
+                {
+                    inimigo.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        if (faseAtual == 5)
+        {
+            if (PlayerPrefs.GetInt("FASE5") == 1)
+            {
+                GameObject[] Inimigos;
+                Inimigos = GameObject.FindGameObjectsWithTag("Enemy");
+
+                foreach (GameObject inimigo in Inimigos)
+                {
+                    inimigo.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        if (faseAtual == 6)
+        {
+            if (PlayerPrefs.GetInt("FASE6") == 1)
+            {
+                GameObject[] Inimigos;
+                Inimigos = GameObject.FindGameObjectsWithTag("Enemy");
+
+                foreach (GameObject inimigo in Inimigos)
+                {
+                    inimigo.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        if (faseAtual == 7)
+        {
+            if (PlayerPrefs.GetInt("FASE7") == 1)
+            {
+                GameObject[] Inimigos;
+                Inimigos = GameObject.FindGameObjectsWithTag("Enemy");
+
+                foreach (GameObject inimigo in Inimigos)
+                {
+                    inimigo.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        if (faseAtual == 8)
+        {
+            if (PlayerPrefs.GetInt("FASE8") == 1)
+            {
+                GameObject[] Inimigos;
+                Inimigos = GameObject.FindGameObjectsWithTag("Enemy");
+
+                foreach (GameObject inimigo in Inimigos)
+                {
+                    inimigo.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        if (faseAtual == 9)
+        {
+            if (PlayerPrefs.GetInt("FASE9") == 1)
+            {
+                GameObject[] Inimigos;
+                Inimigos = GameObject.FindGameObjectsWithTag("Enemy");
+
+                foreach (GameObject inimigo in Inimigos)
+                {
+                    inimigo.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        if (faseAtual == 10)
+        {
+            if (PlayerPrefs.GetInt("FASE10") == 1)
+            {
+                GameObject[] Inimigos;
+                Inimigos = GameObject.FindGameObjectsWithTag("Enemy");
+
+                foreach (GameObject inimigo in Inimigos)
+                {
+                    inimigo.gameObject.SetActive(false);
+                }
+            }
+        }
     }
 
     void ControleAvancarFase()

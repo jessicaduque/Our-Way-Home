@@ -12086,9 +12086,37 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2645376481583656776, guid: 5749d32c566274840bd38d3d9cfefa7c, type: 3}
+      propertyPath: MusicaFundo
+      value: 
+      objectReference: {fileID: 7533174399705915526}
+    - target: {fileID: 2645376481583656777, guid: 5749d32c566274840bd38d3d9cfefa7c, type: 3}
+      propertyPath: m_Size.y
+      value: 2.380973
+      objectReference: {fileID: 0}
+    - target: {fileID: 2645376481583656777, guid: 5749d32c566274840bd38d3d9cfefa7c, type: 3}
+      propertyPath: m_Center.x
+      value: 0.004811659
+      objectReference: {fileID: 0}
+    - target: {fileID: 2645376481583656777, guid: 5749d32c566274840bd38d3d9cfefa7c, type: 3}
+      propertyPath: m_Center.y
+      value: 0.82204163
+      objectReference: {fileID: 0}
+    - target: {fileID: 2645376481583656777, guid: 5749d32c566274840bd38d3d9cfefa7c, type: 3}
+      propertyPath: m_Center.z
+      value: -1.4686684e-17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2645376481583656777, guid: 5749d32c566274840bd38d3d9cfefa7c, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3612390304238563153, guid: 5749d32c566274840bd38d3d9cfefa7c, type: 3}
       propertyPath: m_Name
       value: Boss
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612390304238563153, guid: 5749d32c566274840bd38d3d9cfefa7c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4137147224578864619, guid: 5749d32c566274840bd38d3d9cfefa7c, type: 3}
       propertyPath: m_RootOrder

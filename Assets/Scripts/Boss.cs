@@ -5,11 +5,13 @@ using UnityEngine.AI;
 
 public class Boss : MonoBehaviour
 {
+    public AudioSource MusicaFundo;
+
     // Animador
     public Animator ControlAnim;
 
     // Stats
-    public float hp = 20;
+    public float hp = 25;
     float expDada = 20;
     bool vivo = true;
 
@@ -172,17 +174,18 @@ public class Boss : MonoBehaviour
 
     public void TomeiDano(float danoALevar)
     {
+        ControlAnim.SetTrigger("Damage");
+
         if (vivo)
         {
             hp -= danoALevar;
-            ControlAnim.SetTrigger("Damage");
-
         }
         if (hp <= 0)
         {
             vivo = false;
             GameObject.FindGameObjectWithTag("GameController").GetComponent<GerenciadorFase>().InimigoMorreu();
             ControlAnim.SetBool("Death", true);
+            Morrer();
 
         }
     }
@@ -211,6 +214,7 @@ public class Boss : MonoBehaviour
 
     public void Morrer()
     {
+        MusicaFundo.Stop();
         Destroy(this.gameObject);
     }
 

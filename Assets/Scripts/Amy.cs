@@ -288,7 +288,6 @@ public class Amy : MonoBehaviour
     void AlteracaoVida(float alteracaoHP)
     {
 
-
         // Se a alteração de hp for negativo (significando que o player levou o ataque, e não uma cura), verifica se o ataque deve ser ou não diminuído pela metade
         if (metadeValorAtaque && alteracaoHP < 0)
         {
@@ -304,13 +303,12 @@ public class Amy : MonoBehaviour
         {
             hp = 10;
         }
+        PlayerPrefs.SetFloat("AMY_VIDA", hp);
 
-        if(hp <= 0)
+        if (hp <= 0)
         {
             Morrer();
         }
-
-        //***Alterar barra de vida aqui
 
     }
 
@@ -331,7 +329,6 @@ public class Amy : MonoBehaviour
         exp = PlayerPrefs.GetFloat("AMY_EXP");
         hp = PlayerPrefs.GetFloat("AMY_VIDA");
         vivo = PlayerPrefs.GetInt("AMY_VIVO");
-        //mana = PlayerPrefs.GetFloat("AMY_MANA");
 
         levandoDano = false;
         estaAtacando = false;
@@ -341,10 +338,6 @@ public class Amy : MonoBehaviour
     {
         PlayerPrefs.SetInt("AMY_NIVEL", nivel);
         PlayerPrefs.SetInt("AMY_VIVO", vivo);
-        if (hp != 0)
-        {
-            PlayerPrefs.SetFloat("AMY_VIDA", hp);
-        }
         PlayerPrefs.SetFloat("AMY_MANA", mana);
     }
 
