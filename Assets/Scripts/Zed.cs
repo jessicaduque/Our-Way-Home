@@ -120,7 +120,7 @@ public class Zed : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && vivo == 1)
         {
             clicou = 1;
-            if (estaAtacando || levandoDano)
+            if (estaAtacando)
             {
                 Destino = transform.position;
             }

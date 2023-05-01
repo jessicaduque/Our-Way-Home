@@ -38,14 +38,16 @@ public class SlimeRabbit : MonoBehaviour
     private void Update()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
-        transform.LookAt(Player.transform.position);
+        if (vivo)
+        {
+            transform.LookAt(Player.transform.position);
+            // Movimentação
+            NavMeshMover();
 
-        // Movimentação
-        NavMeshMover();
-
-        // Ataques
-        ControleAnimacaoAtaque();
-        CoolDownAtaque();
+            // Ataques
+            ControleAnimacaoAtaque();
+            CoolDownAtaque();
+        }
     }
 
     void NavMeshMover()

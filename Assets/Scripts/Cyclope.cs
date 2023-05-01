@@ -9,7 +9,7 @@ public class Cyclope : MonoBehaviour
     public Animator ControlAnim;
 
     // Stats
-    public float hp = 8;
+    public float hp = 7;
     float expDada = 5;
     bool vivo = true;
 
@@ -40,11 +40,14 @@ public class Cyclope : MonoBehaviour
     private void Update()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
-        transform.LookAt(Player.transform.position);
+        if (vivo)
+        {
+            transform.LookAt(Player.transform.position);
+        }
 
         if (Player.GetComponent<Amy>())
         {
-            if (Player.GetComponent<Amy>().vivo == 1)
+            if (Player.GetComponent<Amy>().vivo == 1 && vivo)
             {
                 // Movimentação
                 NavMeshMover();
@@ -56,7 +59,7 @@ public class Cyclope : MonoBehaviour
         }
         else
         {
-            if (Player.GetComponent<Zed>().vivo == 1)
+            if (Player.GetComponent<Zed>().vivo == 1 && vivo)
             {
                 // Movimentação
                 NavMeshMover();

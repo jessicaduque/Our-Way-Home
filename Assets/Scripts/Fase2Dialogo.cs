@@ -62,10 +62,21 @@ public class Fase2Dialogo : MonoBehaviour
         // Falas
         if (Input.GetMouseButtonDown(0))
         {
-            if (tempo > 1f)
+            if (tempo > 0.5f)
             {
-                tempo = 0.0f;
-                numeroFala++;
+                if (numeroFala == 0)
+                {
+                    if (tempo > 2f)
+                    {
+                        tempo = 0.0f;
+                        numeroFala++;
+                    }
+                }
+                else
+                {
+                    tempo = 0.0f;
+                    numeroFala++;
+                }
             }
         }
 

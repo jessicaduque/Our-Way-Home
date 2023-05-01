@@ -11,7 +11,7 @@ public class Boss : MonoBehaviour
     public Animator ControlAnim;
 
     // Stats
-    public float hp = 25;
+    public float hp = 30;
     float expDada = 20;
     bool vivo = true;
 

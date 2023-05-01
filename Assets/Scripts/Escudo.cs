@@ -17,7 +17,7 @@ public class Escudo : MonoBehaviour
         transform.position = GerenciadorFase.PersonagemAtivo.transform.position + new Vector3(0, 0.22f, 0);
         tempo += Time.deltaTime;
 
-        if(tempo > 5)
+        if(tempo > 10)
         {
             tempo = 0.0f;
             MetadeAtkLigado(false);

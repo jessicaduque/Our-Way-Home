@@ -9,7 +9,7 @@ public class Devil : MonoBehaviour
     public Animator ControlAnim;
 
     // Stats
-    public float hp = 12;
+    public float hp = 9;
     float expDada = 7;
     bool vivo = true;
 
@@ -38,11 +38,14 @@ public class Devil : MonoBehaviour
     private void Update()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
-        transform.LookAt(Player.transform.position);
+        if (vivo)
+        {
+            transform.LookAt(Player.transform.position);
+        }
 
         if (Player.GetComponent<Amy>())
         {
-            if (Player.GetComponent<Amy>().vivo == 1)
+            if (Player.GetComponent<Amy>().vivo == 1 && vivo)
             {
                 // Movimentação
                 NavMeshMover();
@@ -53,7 +56,7 @@ public class Devil : MonoBehaviour
         }
         else
         {
-            if (Player.GetComponent<Zed>().vivo == 1)
+            if (Player.GetComponent<Zed>().vivo == 1 && vivo)
             {
                 // Movimentação
                 NavMeshMover();
