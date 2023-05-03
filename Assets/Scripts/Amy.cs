@@ -38,6 +38,9 @@ public class Amy : MonoBehaviour
     public GameObject PontoDeSaidaAgua;
     public GameObject EscudoMagia;
 
+    // Inimigos
+    private Transform nearestEnemy;
+
     void Start()
     {
         // Stats
@@ -79,6 +82,9 @@ public class Amy : MonoBehaviour
         NavMeshMover();
         ControleAnimacaoMover();
 
+        // Olhar inimigos
+        InimigoMaisPerto();
+
         //// Ataques
         // Controle de input e níveis permitidos para ataques
         ControleAtaques();
@@ -104,17 +110,33 @@ public class Amy : MonoBehaviour
             ControlAnim.SetBool("Move", false);
         }
 
-        
-        if (GameObject.FindGameObjectWithTag("Enemy")) 
-        {
-            GameObject Enemy = GameObject.FindGameObjectWithTag("Enemy");
-            if (Vector3.Distance(Enemy.transform.position, transform.position) < 1.5f)
-            {
-                transform.LookAt(Enemy.transform.position);
-            }
-            
-        } 
     }
+
+    void InimigoMaisPerto()
+    {
+        GameObject[] Inimigos;
+        Inimigos = GameObject.FindGameObjectsWithTag("Enemy");
+
+        float minimumDistance = Mathf.Infinity;
+
+        nearestEnemy = null;
+
+        foreach (GameObject enemy in Inimigos)
+        {
+            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+            if (distance < minimumDistance)
+            {
+                minimumDistance = distance;
+                nearestEnemy = enemy.transform;
+            }
+        }
+
+        if(Vector3.Distance(transform.position, nearestEnemy.transform.position) < 1.3f)
+        {
+            transform.LookAt(nearestEnemy.transform.position);
+        }
+    }
+
     void NavMeshMover()
     {
         if (Input.GetMouseButtonDown(0) && vivo == 1)

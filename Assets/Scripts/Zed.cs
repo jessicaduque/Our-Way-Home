@@ -37,6 +37,9 @@ public class Zed : MonoBehaviour
     public GameObject prefabSlash;
     public GameObject EscudoMagia;
 
+    // Inimigos
+    private Transform nearestEnemy;
+
     void Start()
     {
         // Stats
@@ -79,6 +82,9 @@ public class Zed : MonoBehaviour
         NavMeshMover();
         ControleAnimacaoMover();
 
+        // Olhar inimigos
+        InimigoMaisPerto();
+
         //// Ataques
         // Controle de input e níveis permitidos para ataques
         ControleAtaques();
@@ -103,18 +109,33 @@ public class Zed : MonoBehaviour
         {
             ControlAnim.SetBool("Move", false);
         }
+    }
 
+    void InimigoMaisPerto()
+    {
+        GameObject[] Inimigos;
+        Inimigos = GameObject.FindGameObjectsWithTag("Enemy");
 
-        if (GameObject.FindGameObjectWithTag("Enemy"))
+        float minimumDistance = Mathf.Infinity;
+
+        nearestEnemy = null;
+
+        foreach (GameObject enemy in Inimigos)
         {
-            GameObject Enemy = GameObject.FindGameObjectWithTag("Enemy");
-            if (Vector3.Distance(Enemy.transform.position, transform.position) < 1.5f)
+            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+            if (distance < minimumDistance)
             {
-                transform.LookAt(Enemy.transform.position);
+                minimumDistance = distance;
+                nearestEnemy = enemy.transform;
             }
+        }
 
+        if (Vector3.Distance(transform.position, nearestEnemy.transform.position) < 1.3f)
+        {
+            transform.LookAt(nearestEnemy.transform.position);
         }
     }
+
     void NavMeshMover()
     {
         if (Input.GetMouseButtonDown(0) && vivo == 1)
