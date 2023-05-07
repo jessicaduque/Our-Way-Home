@@ -31,7 +31,7 @@ public class Amy : MonoBehaviour
     // Ataques
     //public GameObject MeuAtaque;
     bool estaAtacando = false;
-    bool levandoDano = false;
+    //bool levandoDano = false;
     public GameObject FogoPrefab;
     public GameObject PontoDeSaidaFogo;
     public GameObject DisparoAguaPrefab;
@@ -46,6 +46,7 @@ public class Amy : MonoBehaviour
         // Stats
         LoadStats();
         mana = 10;
+
 
         // Inicio Posição
         GerenciadorFase = GameObject.FindGameObjectWithTag("GameController").GetComponent<GerenciadorFase>();
@@ -92,6 +93,7 @@ public class Amy : MonoBehaviour
         // Atualizar UI
         GameObject.FindGameObjectWithTag("Canvas").GetComponent<CanvasController>().UIAmyDados();
 
+        vivo = PlayerPrefs.GetInt("AMY_VIVO");
         //// Controle Status
         // Salvar stats constantemente
         SalvarStats();
@@ -114,26 +116,31 @@ public class Amy : MonoBehaviour
 
     void InimigoMaisPerto()
     {
-        GameObject[] Inimigos;
-        Inimigos = GameObject.FindGameObjectsWithTag("Enemy");
-
-        float minimumDistance = Mathf.Infinity;
-
-        nearestEnemy = null;
-
-        foreach (GameObject enemy in Inimigos)
+        if (vivo == 1)
         {
-            float distance = Vector3.Distance(transform.position, enemy.transform.position);
-            if (distance < minimumDistance)
+            GameObject[] Inimigos;
+            Inimigos = GameObject.FindGameObjectsWithTag("Enemy");
+
+            float minimumDistance = Mathf.Infinity;
+
+            nearestEnemy = null;
+
+            foreach (GameObject enemy in Inimigos)
             {
-                minimumDistance = distance;
-                nearestEnemy = enemy.transform;
+                float distance = Vector3.Distance(transform.position, enemy.transform.position);
+                if (distance < minimumDistance)
+                {
+                    minimumDistance = distance;
+                    nearestEnemy = enemy.transform;
+                }
             }
-        }
-
-        if(Vector3.Distance(transform.position, nearestEnemy.transform.position) < 1.3f)
-        {
-            transform.LookAt(nearestEnemy.transform.position);
+            if (nearestEnemy != null)
+            {
+                if (Vector3.Distance(transform.position, nearestEnemy.transform.position) < 1.3f)
+                {
+                    transform.LookAt(nearestEnemy.transform.position);
+                }
+            }
         }
     }
 
@@ -327,10 +334,6 @@ public class Amy : MonoBehaviour
         }
         PlayerPrefs.SetFloat("AMY_VIDA", hp);
 
-        if (hp <= 0)
-        {
-            Morrer();
-        }
 
     }
 
@@ -352,7 +355,7 @@ public class Amy : MonoBehaviour
         hp = PlayerPrefs.GetFloat("AMY_VIDA");
         vivo = PlayerPrefs.GetInt("AMY_VIVO");
 
-        levandoDano = false;
+        //levandoDano = false;
         estaAtacando = false;
     }
 
@@ -375,6 +378,7 @@ public class Amy : MonoBehaviour
         }
     }
 
+    /*
     public void LevandoDano(int dano)
     {
         if (dano == 0)
@@ -386,6 +390,8 @@ public class Amy : MonoBehaviour
             levandoDano = false;
         }
     }
+    */
+
     public void AtkAgua()
     {
         AlteracaoMana(-2);
@@ -438,7 +444,6 @@ public class Amy : MonoBehaviour
     public void Morrer()
     {
         vivo = 0;
-        PlayerPrefs.SetInt("AMY_VIVO", vivo);
         ControlAnim.SetBool("Dead", true);
     }
 
@@ -446,6 +451,7 @@ public class Amy : MonoBehaviour
     {
         if(PlayerPrefs.GetInt("ZED_VIVO") == 1)
         {
+            PlayerPrefs.SetInt("AMY_VIVO", 0);
             GerenciadorFase.ZedAtivo();
         }
         else

@@ -127,7 +127,6 @@ public class CanvasController : MonoBehaviour
         PlayerPrefs.SetInt("ZED_VIVO", 1);
         PlayerPrefs.SetFloat("ZED_VIDA", 10);
         PlayerPrefs.SetFloat("ZED_STAMINA", 10);
-        
 
         int faseAtual = GameObject.FindGameObjectWithTag("GameController").GetComponent<GerenciadorFase>().faseAtual;
         SceneManager.LoadScene(faseAtual);

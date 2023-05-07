@@ -24,6 +24,7 @@ public class Fase2Dialogo : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Time.timeScale = 1;
         if (PlayerPrefs.GetInt("FASE2") == 0)
         {
             numeroFala = 0;
@@ -190,6 +191,7 @@ public class Fase2Dialogo : MonoBehaviour
 
     void ControleFalas()
     {
+        
         if (falasRodando)
         {
             tempo += Time.deltaTime;
@@ -197,6 +199,7 @@ public class Fase2Dialogo : MonoBehaviour
 
         if (numeroFala == 0 || numeroFala == 18)
         {
+            Debug.Log(tempo);
             if (tempo >= 1f)
             {
                 DialoguePanel.SetActive(true);

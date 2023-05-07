@@ -31,7 +31,7 @@ public class Zed : MonoBehaviour
     // Ataques
     public GameObject MeuAtaque;
     bool estaAtacando = false;
-    bool levandoDano = false;
+    //bool levandoDano = false;
     public GameObject PontoSaidaAtk2;
     public GameObject[] PontoSaidaAtk3Lista;
     public GameObject prefabSlash;
@@ -72,6 +72,7 @@ public class Zed : MonoBehaviour
 
     void Update()
     {
+
         if (clicou == 0)
         {
             frente = transform.position + GerenciadorFase.frenteInicial;
@@ -92,6 +93,7 @@ public class Zed : MonoBehaviour
         // Atualizar UI
         GameObject.FindGameObjectWithTag("Canvas").GetComponent<CanvasController>().UIZedDados();
 
+        vivo = PlayerPrefs.GetInt("ZED_VIVO");
         //// Controle Status
         // Salvar stats constantemente
         SalvarStats();
@@ -113,26 +115,32 @@ public class Zed : MonoBehaviour
 
     void InimigoMaisPerto()
     {
-        GameObject[] Inimigos;
-        Inimigos = GameObject.FindGameObjectsWithTag("Enemy");
-
-        float minimumDistance = Mathf.Infinity;
-
-        nearestEnemy = null;
-
-        foreach (GameObject enemy in Inimigos)
+        if(vivo == 1)
         {
-            float distance = Vector3.Distance(transform.position, enemy.transform.position);
-            if (distance < minimumDistance)
+            GameObject[] Inimigos;
+            Inimigos = GameObject.FindGameObjectsWithTag("Enemy");
+
+            float minimumDistance = Mathf.Infinity;
+
+            nearestEnemy = null;
+
+            foreach (GameObject enemy in Inimigos)
             {
-                minimumDistance = distance;
-                nearestEnemy = enemy.transform;
+                float distance = Vector3.Distance(transform.position, enemy.transform.position);
+                if (distance < minimumDistance)
+                {
+                    minimumDistance = distance;
+                    nearestEnemy = enemy.transform;
+                }
             }
-        }
 
-        if (Vector3.Distance(transform.position, nearestEnemy.transform.position) < 1.3f)
-        {
-            transform.LookAt(nearestEnemy.transform.position);
+            if (nearestEnemy != null)
+            {
+                if (Vector3.Distance(transform.position, nearestEnemy.transform.position) < 1.3f)
+                {
+                    transform.LookAt(nearestEnemy.transform.position);
+                }
+            }
         }
     }
 
@@ -305,11 +313,6 @@ public class Zed : MonoBehaviour
 
         PlayerPrefs.SetFloat("ZED_VIDA", hp);
 
-        if (hp <= 0)
-        {
-            Morrer();
-        }
-
     }
 
     public void AlteracaoEXP(float alteracaoEXP)
@@ -326,7 +329,7 @@ public class Zed : MonoBehaviour
         stamina = PlayerPrefs.GetFloat("ZED_STAMINA");
         vivo = PlayerPrefs.GetInt("ZED_VIVO");
 
-        levandoDano = false;
+        //levandoDano = false;
         estaAtacando = false;
     }
 
@@ -348,6 +351,7 @@ public class Zed : MonoBehaviour
         }
     }
 
+    /*
     public void LevandoDano(int dano)
     {
         if (dano == 0)
@@ -359,6 +363,7 @@ public class Zed : MonoBehaviour
             levandoDano = false;
         }
     }
+    */
 
     public void AtivarAtk()
     {
@@ -421,7 +426,8 @@ public class Zed : MonoBehaviour
     {
         if (PlayerPrefs.GetInt("AMY_VIVO") == 1)
         {
-            GerenciadorFase.ZedAtivo();
+            PlayerPrefs.SetInt("ZED_VIVO", 0);
+            GerenciadorFase.AmyAtivo();
         }
         else
         {
@@ -432,7 +438,7 @@ public class Zed : MonoBehaviour
     public void Morrer()
     {
         vivo = 0;
-        PlayerPrefs.SetInt("ZED_VIVO", vivo);
+        PlayerPrefs.SetInt("ZED_VIVO", 0);
         ControlAnim.SetBool("Dead", true);
     }
 
