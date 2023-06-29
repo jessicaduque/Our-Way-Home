@@ -11574,6 +11574,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 537870146, guid: 75cb8d961e0000d4594c09e8d7960a50, type: 3}
+      propertyPath: m_text
+      value: Gostaria de continuar de onde morreu?
+      objectReference: {fileID: 0}
     - target: {fileID: 877715021, guid: 75cb8d961e0000d4594c09e8d7960a50, type: 3}
       propertyPath: m_IsActive
       value: 1
